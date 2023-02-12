@@ -1,0 +1,23 @@
+version: "3"
+services:
+    db:
+        image: mysql:8.0
+        environment:
+            MYSQL_ROOT_PASSWORD: root
+            MYSQL_DATABASE: nula
+        ports:
+            - "3306:3306"
+    web:
+        build: .
+        ports:
+            - "8000:80"
+    phpmyadmin:
+        image: phpmyadmin/phpmyadmin
+        environment:
+            PMA_HOST: db
+            PMA_PORT: 3306
+            PMA_ARBITRARY: 1
+        ports:
+            - "8080:80"
+        links:
+            - db

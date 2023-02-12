@@ -1,0 +1,45 @@
+{
+    "private": true,
+    "scripts": {
+        "dev": "vite",
+        "watch": "mix watch",
+        "build": "vite build"
+    },
+    "devDependencies": {
+        "@babel/preset-react": "^7.18.6",
+        "@popperjs/core": "^2.11.6",
+        "@vitejs/plugin-react": "^2.2.0",
+        "axios": "^1.3.2",
+        "bootstrap": "^5.2.3",
+        "browser-sync": "^2.27.11",
+        "browser-sync-webpack-plugin": "^2.3.0",
+        "cross-env": "^7.0.3",
+        "laravel-vite-plugin": "^0.7.4",
+        "lodash": "^4.17.19",
+        "postcss": "^8.1.14",
+        "react": "^18.2.0",
+        "react-dom": "^18.2.0",
+        "sass": "^1.56.1",
+        "sass-loader": "^12.6.0",
+        "ts-loader": "^9.4.2",
+        "typescript": "^4.9.5",
+        "vite": "^4.1.1"
+    },
+    "dependencies": {
+        "@emotion/react": "^11.10.5",
+        "@emotion/styled": "^11.10.5",
+        "@mui/material": "^5.11.8",
+        "@types/react": "^18.0.28",
+        "@types/react-dom": "^18.0.10",
+        "@vitejs/plugin-react": "^3.1.0",
+        "@vitejs/plugin-react-refresh": "^1.3.6",
+        "eact": "0.0.1-security",
+        "formik": "^2.2.9",
+        "laravel-mix": "^6.0.49",
+        "react": "^18.2.0",
+        "react-query": "^3.39.3",
+        "react-router": "^6.8.1",
+        "react-router-dom": "^6.8.1",
+        "source-map-support": "^0.5.21"
+    }
+}
