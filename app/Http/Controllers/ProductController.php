@@ -11,22 +11,25 @@ class ProductController extends Controller
     {
         $query = Product::query();
 
-        if ($request->has('name')) {
+        if ($request->has('name') && isset($request->name)) {
             $query->where('name', 'like', "%{$request->input('name')}%");
         }
 
-        if ($request->has('price_from') && $request->has('price_to')) {
-            $query->whereBetween('price', [
-                $request->input('price_from'),
-                $request->input('price_to'),
-            ]);
+        if ($request->has('price_from') && !empty($request->input('price_from'))) {
+            $query->where('price', '>=', $request->input('price_from'));
         }
 
-        if ($request->has('date_added_from') && $request->has('date_added_to')) {
-            $query->whereBetween('created_at', [
-                $request->input('date_added_from'),
-                $request->input('date_added_to'),
-            ]);
+        if ($request->has('price_to') && !empty($request->input('price_to'))) {
+            $query->where('price', '<=', $request->input('price_to'));
+        }
+
+
+        if ($request->has('date_added_from') && isset($request->date_added_from)) {
+            $query->where('created_at', '>=', $request->input('date_added_from'));
+        }
+
+        if ($request->has('date_added_to') && isset($request->date_added_to)) {
+            $query->where('created_at', '<=', $request->input('date_added_to'));
         }
 
 
