@@ -1,7 +1,8 @@
 export const colors = {
     brand: "#14141F",
     brandLight: "rgba(20,20,31,0.88)",
-    brandBlue: "#5ECAE7",
+    brandBlue: "#03045E",
+    brandLightBlue: "#023E8A",
     brandYellow: "#FAC61F",
 
     black: "#000",

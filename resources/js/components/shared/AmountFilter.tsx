@@ -2,16 +2,16 @@ import React, { FC, useCallback } from "react";
 import styled from "styled-components";
 import { SearchField } from "../shared/SearchField";
 import { Typography, debounce } from "@material-ui/core";
-import { Filter, SearchInputType } from "../../utils/types";
+import { ProductFilter, SearchInputType } from "../../utils/types";
 
 type Props = {
-    filters: Filter;
-    setFilters: (filters: Filter) => void;
+    filters: ProductFilter;
+    setFilters: (filters: ProductFilter) => void;
 };
 
 export const AmountFilter: FC<Props> = ({ filters, setFilters }) => {
     const debouncer = useCallback(
-        debounce((filter: Filter) => {
+        debounce((filter: ProductFilter) => {
             setFilters(filter);
         }, 300),
         []
@@ -26,7 +26,9 @@ export const AmountFilter: FC<Props> = ({ filters, setFilters }) => {
     return (
         <ProductFiltersContainer>
             <StyledSearchContainer>
-                <Typography variant={"overline"}>Amount from</Typography>
+                <StyledTypography variant={"overline"}>
+                    Amount from
+                </StyledTypography>
                 <SearchField
                     type={SearchInputType.number}
                     name="priceFrom"
@@ -35,7 +37,9 @@ export const AmountFilter: FC<Props> = ({ filters, setFilters }) => {
                 />
             </StyledSearchContainer>
             <StyledSearchContainer>
-                <Typography variant={"overline"}>Amount to</Typography>
+                <StyledTypography variant={"overline"}>
+                    Amount to
+                </StyledTypography>
                 <SearchField
                     type={SearchInputType.number}
                     name="priceTo"
@@ -55,4 +59,8 @@ const StyledSearchContainer = styled.div`
     display: flex;
     flex-direction: column;
     margin-bottom: 2rem;
+`;
+
+const StyledTypography = styled(Typography)`
+    letter-spacing: 0.05rem;
 `;

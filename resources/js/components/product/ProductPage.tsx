@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { useQuery } from "react-query";
 import { PageLayoutWrapper } from "../shared/PageLayoutWrapper";
 import styled from "styled-components";
@@ -6,14 +6,14 @@ import { Paper, Typography } from "@material-ui/core";
 import { atMinWidth } from "../../../styles/helpers";
 import { theme } from "../../../styles/muiThemes";
 import { ProductsTable } from "./ProductsTable";
-import {
-    SearchField,
-    useSearchFieldState,
-    SearchFieldRef,
-} from "../shared/SearchField";
+import { SearchField, useSearchFieldState } from "../shared/SearchField";
 import axios from "axios";
-import { Filter } from "../../utils/types";
+import { ProductFilter, Product, Supplier } from "../../utils/types";
 import { ProductFilters } from "./ProductFilters";
+import { Button } from "../shared/Button";
+import { PlusIcon } from "../../../assets/icons/Plus.icon";
+import { colors } from "../../../styles/colors";
+import { AddNewProduct } from "./AddNewProduct";
 
 export const initialState = {
     name: "",
@@ -25,9 +25,10 @@ export const initialState = {
 
 export const ProductPage = () => {
     const { searchString, handleFilterChange } = useSearchFieldState();
-    const [filters, setFilters] = useState<Filter>(initialState);
+    const [filters, setFilters] = useState<ProductFilter>(initialState);
+    const [dialogOpened, setDialogOpened] = useState(false);
 
-    const { name, priceFrom, priceTo, dateAddedFrom, dateAddedTo } = filters;
+    const { priceFrom, priceTo, dateAddedFrom, dateAddedTo } = filters;
 
     const urlParams = new URLSearchParams({
         name: searchString,
@@ -36,44 +37,80 @@ export const ProductPage = () => {
         date_added_from: dateAddedFrom,
         date_added_to: dateAddedTo,
     });
-
     const fetchProducts = async () => {
         const response = await axios(`/api/products?${urlParams}`);
         return response.data;
     };
 
-    const { isLoading, data: products } = useQuery<any>(
-        `/api/products?${urlParams}`,
-        fetchProducts
+    const queryKey = `/api/products?${urlParams}`;
+
+    const fetchSuppliers = async () => {
+        const response = await axios(`/api/suppliers`);
+        return response.data;
+    };
+    const { isLoading, data: suppliers } = useQuery<Supplier[]>(
+        `/api/suppliers`,
+        fetchSuppliers
     );
+
+    const { data: products } = useQuery<Product[]>(queryKey, fetchProducts);
 
     return (
         <PageLayoutWrapper>
             <StyledPaper elevation={0}>
-                <Typography variant="h3">Products</Typography>
-                <SearchField
-                    fullWidth
-                    name="searchString"
-                    onChange={handleFilterChange}
-                    placeholder="Search product by name"
-                />
+                <Typography variant="h1">Products</Typography>
 
-                <ProductListContainer>
-                    <ProductFilters filters={filters} setFilters={setFilters} />
-                    <div>
-                        <Typography variant={"overline"}>Products</Typography>
-                        {products && (
-                            <ProductsTable
-                                products={products}
-                                isLoading={isLoading}
-                            />
-                        )}
-                    </div>
-                </ProductListContainer>
+                <StyledMainContent>
+                    <SearchBlock>
+                        <SearchField
+                            fullWidth
+                            name="searchString"
+                            onChange={handleFilterChange}
+                            placeholder="Search product by name"
+                        />
+                        <Button
+                            kind={"primary"}
+                            onClick={() => setDialogOpened(true)}
+                        >
+                            <PlusIcon color={colors.white} />{" "}
+                            <ButtonText>Add new product</ButtonText>
+                        </Button>
+                    </SearchBlock>
+
+                    <ProductListContainer>
+                        <ProductFilters
+                            filters={filters}
+                            setFilters={setFilters}
+                        />
+                        <div>
+                            <Typography variant={"overline"}>
+                                Products
+                            </Typography>
+                            {products && (
+                                <ProductsTable
+                                    products={products}
+                                    isLoading={isLoading}
+                                    queryKey={queryKey}
+                                    suppliers={suppliers}
+                                />
+                            )}
+                        </div>
+                    </ProductListContainer>
+                    <AddNewProduct
+                        dialogOpened={dialogOpened}
+                        setDialogOpened={setDialogOpened}
+                        queryKey={queryKey}
+                        suppliers={suppliers}
+                    />
+                </StyledMainContent>
             </StyledPaper>
         </PageLayoutWrapper>
     );
 };
+
+const StyledMainContent = styled.div`
+    margin-top: 2rem;
+`;
 
 const StyledPaper = styled(Paper)`
     min-height: 90vh;
@@ -100,5 +137,24 @@ const ProductListContainer = styled.div`
     ${theme.breakpoints.down("sm")} {
         padding-bottom: 2em;
         display: block;
+    }
+`;
+
+const ButtonText = styled.span`
+    margin-left: 10px;
+`;
+
+const SearchBlock = styled.div`
+    display: grid;
+    justify-content: end;
+    grid-template-columns: 1fr;
+    gap: 20px;
+
+    ${atMinWidth.tablet} {
+        grid-template-columns: 1fr auto;
+    }
+
+    ${atMinWidth.custom(1300)} {
+        width: 100%;
     }
 `;

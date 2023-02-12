@@ -7,9 +7,12 @@ import {
 } from "react-router-dom";
 import { Dashboard } from "./dashboard/Dashboard";
 import { ProductPage } from "./product/ProductPage";
-import { SupplierPage } from "./supplier/SupplierPage";
 import { WarehousePage } from "./warehouse/WarehousePage";
 import { QueryClient, QueryClientProvider } from "react-query";
+import { ThemeProvider } from "@material-ui/core";
+import { theme } from "../../styles/muiThemes";
+import { SnackProvider } from "./shared/SnackProvider";
+import { SupplierPage } from "./supplier/SupplierPage";
 
 const App = () => {
     const queryClient = new QueryClient();
@@ -24,47 +27,15 @@ const App = () => {
 
     return (
         <React.StrictMode>
-            <QueryClientProvider client={queryClient}>
-                <RouterProvider router={router} />
-            </QueryClientProvider>
+            <ThemeProvider theme={theme}>
+                <QueryClientProvider client={queryClient}>
+                    <SnackProvider>
+                        {<RouterProvider router={router} />}
+                    </SnackProvider>
+                </QueryClientProvider>
+            </ThemeProvider>
         </React.StrictMode>
     );
 };
 
 export default App;
-
-// import React, { useState } from "react";
-
-// export interface IUser {
-//     name: string;
-//     age: number;
-// }
-// const App = () => {
-//     const [users, setUsers] = useState<IUser[]>([
-//         {
-//             name: "Bijaya",
-//             age: 25,
-//         },
-//         {
-//             name: "Ram",
-//             age: 25,
-//         },
-//     ]);
-
-//     return (
-//         <div>
-//             <h1>Users list</h1>
-//             <ul>
-//                 {users.map((user: IUser) => {
-//                     return (
-//                         <li key={user.name}>
-//                             {user.name} is {user.age} years old
-//                         </li>
-//                     );
-//                 })}
-//             </ul>
-//         </div>
-//     );
-// };
-
-// export default App;

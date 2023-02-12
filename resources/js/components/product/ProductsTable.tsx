@@ -8,13 +8,21 @@ import {
     TableBody,
 } from "@material-ui/core";
 import { TableProductRow } from "./TableProductRow";
+import { Product, Supplier } from "../../utils/types";
 
 interface Props {
-    products: any;
+    products: Product[];
     isLoading: boolean;
+    queryKey: string;
+    suppliers?: Supplier[];
 }
 
-export const ProductsTable = ({ products, isLoading }: Props) => {
+export const ProductsTable = ({
+    products,
+    isLoading,
+    queryKey,
+    suppliers,
+}: Props) => {
     const areNoProducts = !products || products?.length === 0;
     return (
         <TableContainer>
@@ -26,6 +34,7 @@ export const ProductsTable = ({ products, isLoading }: Props) => {
                         <TableCell>Price</TableCell>
                         <TableCell>Supplier</TableCell>
                         <TableCell>Date added</TableCell>
+                        <TableCell>Actions</TableCell>
                     </TableRow>
                 </TableHead>
                 <TableBody>
@@ -36,8 +45,13 @@ export const ProductsTable = ({ products, isLoading }: Props) => {
                             </TableCell>
                         </TableRow>
                     )}
-                    {products?.map((product: any) => (
-                        <TableProductRow key={product.id} product={product} />
+                    {products?.map((product: Product) => (
+                        <TableProductRow
+                            key={product.id}
+                            product={product}
+                            queryKey={queryKey}
+                            suppliers={suppliers}
+                        />
                     ))}
                 </TableBody>
             </Table>

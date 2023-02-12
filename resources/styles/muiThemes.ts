@@ -1,11 +1,11 @@
 import { Overrides as CoreOverrides } from "@material-ui/core/styles/overrides";
-import { createMuiTheme, Theme } from "@material-ui/core";
+import { createTheme, Theme } from "@material-ui/core";
 import { colors } from "./colors";
 import { AlertClassKey } from "@material-ui/lab";
 import { CSSProperties } from "react";
 import { size } from "./helpers";
 
-const themes = createMuiTheme({
+const themes = createTheme({
     palette: {
         primary: {
             main: colors.brand,
@@ -16,16 +16,11 @@ const themes = createMuiTheme({
     },
 
     typography: {
-        fontFamily: "Ginto Normal Regular",
+        fontFamily: "Tahoma",
         fontSize: 16,
     },
 
     breakpoints: {
-        //TODO: connect with size.breakpoints
-
-        // mobile: "480px",
-        // tablet: "768px",
-        // desktop: "992px",
         values: {
             xs: 400, // not used
             sm: size.breakpoints.mobile,
@@ -55,18 +50,22 @@ export const createMuiAppThemeOverrides: OverridesFunc = (theme) => ({
             fontSize: 14,
         },
         h1: {
-            fontFamily: "Ginto Nord",
+            fontFamily: "Tahoma",
+            fontWeight: "bold",
             fontSize: 48,
+            color: colors.brandBlue,
         },
         h3: {
             fontSize: 31,
             marginBottom: 24,
-            fontFamily: "Ginto Nord",
+            fontWeight: "bold",
+            fontFamily: "Tahoma",
+            color: colors.brandBlue,
         },
 
         subtitle1: {
-            fontFamily: "Ginto Normal Regular",
-            fontWeight: 400,
+            fontFamily: "Tahoma",
+            fontWeight: "bold",
             fontStyle: "normal",
             fontSize: "14px",
             lineHeight: "14px",
@@ -84,13 +83,13 @@ export const createMuiAppThemeOverrides: OverridesFunc = (theme) => ({
 
     MuiButton: {
         root: {
-            borderRadius: 0,
+            borderRadius: 4,
             outline: 0,
             fontWeight: 800,
             height: "48px",
             padding: "16px 32px",
             letterSpacing: "0.115em",
-            fontFamily: "Ginto Nord",
+            fontFamily: "Tahoma",
             "&:focus": {
                 outline: "none",
             },
@@ -106,20 +105,14 @@ export const createMuiAppThemeOverrides: OverridesFunc = (theme) => ({
             color: `${colors.white} !important`,
             fontSize: "13px",
             boxShadow: "none",
-            // boxShadow: "none",
+            backgroundColor: `${colors.brandBlue} !important`,
 
             "&:hover": {
                 color: `${colors.white} !important`,
-                backgroundColor: `${colors.brandLight} !important`,
+                backgroundColor: `${colors.brandLightBlue} !important`,
                 boxShadow: "none",
                 transition: ".3s",
             },
-            // "@media(hover:none)": {
-            //   "&:hover": {
-            //     color: `${colors.white} !important`,
-            //     backgroundColor: `${colors.brand} !important`,
-            //   },
-            // },
         },
 
         text: {
@@ -146,7 +139,6 @@ export const createMuiAppThemeOverrides: OverridesFunc = (theme) => ({
             borderRadius: 0,
         },
 
-        // FIXME: border: "none !important" to overwrite styles from form.scss
         input: {
             border: "none !important",
             lineHeight: "1",
@@ -302,9 +294,7 @@ export const createMuiAppThemeOverrides: OverridesFunc = (theme) => ({
             fontSize: 12,
         },
         root: {
-            [theme.breakpoints.down("md")]: {
-                padding: 11,
-            },
+            padding: 8,
         },
     },
     MuiDrawer: {

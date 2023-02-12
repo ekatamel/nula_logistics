@@ -2,12 +2,12 @@ import React, { FC, useState } from "react";
 import styled from "styled-components";
 import { FormDatePicker } from "./FormDatePicker";
 import { format } from "date-fns";
-import { Filter } from "../../utils/types";
+import { ProductFilter } from "../../utils/types";
 import { Typography } from "@material-ui/core";
 
 type Props = {
-    filters: Filter;
-    setFilters: (filters: Filter) => void;
+    filters: ProductFilter;
+    setFilters: (filters: ProductFilter) => void;
 };
 
 export const DateFilter: FC<Props> = ({ filters, setFilters }) => {

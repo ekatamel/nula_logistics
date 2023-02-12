@@ -1,44 +1,31 @@
 import React from "react";
 import { TableRow, TableCell, IconButton } from "@material-ui/core";
-import { MoneyFormatter, dateFormatter } from "../../utils/formatters";
 import { ItemField } from "../shared/ItemField";
 import { TextFieldData } from "../../utils/types/TextFieldData";
-import { SelectFieldData } from "../../utils/types/SelectFieldData";
-import {
-    getSupplierSelectGroup,
-    useQueryNotification,
-} from "../../utils/utils";
+import { useQueryNotification } from "../../utils/utils";
 import styled from "styled-components";
 import ArchiveIcon from "@material-ui/icons/Archive";
 import { useMutation, useQueryClient } from "react-query";
 import axios from "axios";
-import { Product, Supplier } from "../../utils/types";
+import { Supplier } from "../../utils/types";
 
 interface Props {
-    product: Product;
-    queryKey: string;
-    suppliers?: Supplier[];
+    supplier: Supplier;
 }
 
-export const TableProductRow = ({ product, queryKey, suppliers }: Props) => {
+export const TableSupplierRow = ({ supplier }: Props) => {
     const queryClient = useQueryClient();
-    const { id, name, price, created_at, supplier } = product;
+    const { id, name, address } = supplier;
     const { successNotification, errorNotification } = useQueryNotification();
 
-    // TODO FIX
-    const priceFormatted = new MoneyFormatter("CZK").format(Number(price));
-    const parsedDate = dateFormatter(created_at);
-
-    const suppliersSelect = suppliers && getSupplierSelectGroup(suppliers);
-
     const deleteProduct = (id: number) => {
-        return axios.delete(`/api/products/${id}`);
+        return axios.delete(`/api/suppliers/${id}`);
     };
 
     const handleDelete = useMutation(deleteProduct, {
         onSuccess: async () => {
-            await queryClient.refetchQueries(queryKey);
-            successNotification("Product was updated!");
+            await queryClient.refetchQueries("/api/suppliers");
+            successNotification("Supplier was updated!");
         },
         onError: (error: any) => {
             if (error.status != 422) {
@@ -55,40 +42,21 @@ export const TableProductRow = ({ product, queryKey, suppliers }: Props) => {
             <TableCell>
                 <ItemField
                     updatableField={new TextFieldData(name, "name")}
-                    updatePath={`/api/products/${id}`}
+                    updatePath={`/api/suppliers/${id}`}
                     error={""}
                     noPadding={true}
                     updatable={true}
-                    queryKey={queryKey}
                 />
             </TableCell>
             <TableCell>
                 <ItemField
-                    updatableField={new TextFieldData(price, "price")}
-                    updatePath={`/api/products/${id}`}
+                    updatableField={new TextFieldData(address, "price")}
+                    updatePath={`/api/suppliers/${id}`}
                     error={""}
                     noPadding={true}
                     updatable={true}
-                    queryKey={queryKey}
                 />
             </TableCell>
-            <TableCell>
-                <ItemField
-                    updatableField={
-                        new SelectFieldData(
-                            supplier.id,
-                            "supplier_id",
-                            suppliersSelect
-                        )
-                    }
-                    updatePath={`/api/products/${id}`}
-                    error={""}
-                    noPadding={true}
-                    updatable={true}
-                    queryKey={queryKey}
-                />
-            </TableCell>
-            <TableCell>{parsedDate}</TableCell>
             <TableCell>
                 <ActionButtons>
                     <IconButton onClick={() => handleDelete.mutate(id)}>

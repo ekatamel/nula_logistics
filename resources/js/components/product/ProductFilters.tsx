@@ -2,16 +2,17 @@ import React, { FC } from "react";
 import styled from "styled-components";
 import { Button } from "../shared/Button";
 import { initialState } from "./ProductPage";
-import { Filter } from "../../utils/types";
+import { ProductFilter } from "../../utils/types";
 import { DateFilter } from "../shared/DateFilter";
 import { AmountFilter } from "../shared/AmountFilter";
 
 type Props = {
-    filters: Filter;
-    setFilters: (filters: Filter) => void;
+    filters: ProductFilter;
+    setFilters: (filters: ProductFilter) => void;
 };
 
 export const ProductFilters: FC<Props> = ({ filters, setFilters }) => {
+    // REPLACE BY BETTER SOLUTION
     const clearFilters = () => {
         const inputs = document.querySelectorAll(
             "input"
