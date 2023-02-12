@@ -33,3 +33,8 @@ export const getSupplierSelectGroup = (suppliers: any) => {
         return { value: supplier.id.toString(), label: supplier.name };
     });
 };
+
+export const isActive = (path: string): boolean => {
+    if (window.location.pathname == path) return true;
+    else return window.location.pathname + window.location.search == path;
+};

@@ -6,29 +6,44 @@ import { Formik } from "formik";
 import { ContentPaper } from "../shared/ContentPaper";
 import { Button } from "../shared/Button";
 import { useCustomMutation, Mutation } from "../../utils/useCustomMutation";
-import { useQueryNotification } from "../../utils/utils";
-import { FormikSubmitHandler, Product, Supplier } from "../../utils/types";
+import {
+    getSupplierSelectGroup,
+    useQueryNotification,
+} from "../../utils/utils";
+import {
+    FormikSubmitHandler,
+    Product,
+    Supplier,
+    Warehouse,
+} from "../../utils/types";
 import { FormSelect } from "../shared/FormSelect";
 import { AxiosError } from "axios";
 
 interface Props {
     dialogOpened: boolean;
     setDialogOpened: (dialogOpened: boolean) => void;
+    queryKey: string;
+    suppliers?: Supplier[];
 }
 
 const initValues = {
     name: "",
-    address: "",
+    price: "",
     supplier_id: "",
 };
 
-export const AddNewSupplier = ({ dialogOpened, setDialogOpened }: Props) => {
+export const AddNewWarehouse = ({
+    dialogOpened,
+    setDialogOpened,
+    queryKey,
+    suppliers,
+}: Props) => {
     const queryClient = useQueryClient();
 
     const { successNotification, errorNotification } = useQueryNotification();
 
-    const createNewSubjectMutation: Mutation<Product> = (initVals) => ({
-        path: "/api/suppliers",
+    const createNewSubjectMutation: Mutation<Warehouse> = (initVals) => ({
+        path: "/api/warehouses",
         method: "POST",
         params: initVals,
     });
@@ -38,8 +53,8 @@ export const AddNewSupplier = ({ dialogOpened, setDialogOpened }: Props) => {
         {
             onSuccess: async (data: Record<string, number | any>) => {
                 await data.json();
-                await queryClient.refetchQueries("/api/suppliers");
-                successNotification("New supplier was created!");
+                await queryClient.refetchQueries(queryKey);
+                successNotification("New warehouse was created!");
 
                 setDialogOpened(false);
             },
@@ -66,7 +81,7 @@ export const AddNewSupplier = ({ dialogOpened, setDialogOpened }: Props) => {
     return (
         <Dialog open={dialogOpened} onClose={() => setDialogOpened(false)}>
             <StyledModal>
-                <Typography variant={"h3"}>New supplier</Typography>
+                <Typography variant={"h3"}>New warehouse</Typography>
                 <Formik initialValues={initValues} onSubmit={formikSubmit}>
                     {(formikProps) => {
                         const {
@@ -83,28 +98,32 @@ export const AddNewSupplier = ({ dialogOpened, setDialogOpened }: Props) => {
                                 <StyledTextField
                                     fullWidth
                                     required={true}
-                                    value={values.name}
-                                    name="name"
-                                    label={"Supplier name"}
-                                    placeholder={"Enter supplier name"}
-                                    onChange={handleChange}
-                                    error={Boolean(errors["name"])}
-                                    helperText={<>{errors["name"]?.[0]}</>}
-                                />
-                                <StyledTextField
-                                    fullWidth
-                                    required={true}
                                     value={values.address}
                                     name="address"
-                                    label={"Adress"}
-                                    placeholder={"Enter supplier's address"}
-                                    onChange={handleChange}
-                                    error={
-                                        touched["address"] &&
-                                        Boolean(errors["address"])
+                                    label={"Address"}
+                                    placeholder={
+                                        "Enter warehouse's address name"
                                     }
+                                    onChange={handleChange}
+                                    error={Boolean(errors["address"])}
                                     helperText={<>{errors["address"]?.[0]}</>}
                                 />
+
+                                <StyledFormSelect
+                                    value={values.supplier_id}
+                                    values={
+                                        getSupplierSelectGroup(suppliers) || []
+                                    }
+                                    name={`supplier_id`}
+                                    label={"Supplier"}
+                                    onChange={handleChange}
+                                    required={true}
+                                />
+                                {errors && errors["supplier_id"]?.[0] && (
+                                    <StyledError>
+                                        The field supplier is required
+                                    </StyledError>
+                                )}
 
                                 <ButtonWrapper>
                                     <Button

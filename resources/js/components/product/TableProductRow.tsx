@@ -38,7 +38,7 @@ export const TableProductRow = ({ product, queryKey, suppliers }: Props) => {
     const handleDelete = useMutation(deleteProduct, {
         onSuccess: async () => {
             await queryClient.refetchQueries(queryKey);
-            successNotification("Product was updated!");
+            successNotification("Product was deleted!");
         },
         onError: (error: any) => {
             if (error.status != 422) {

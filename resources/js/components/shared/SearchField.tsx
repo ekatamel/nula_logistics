@@ -12,6 +12,7 @@ import { debounce, InputAdornment, TextField } from "@material-ui/core";
 import { Icon } from "../../../assets/icons/Icon";
 import { SearchIcon } from "../../../assets/icons/Search.icon";
 import _ from "lodash";
+import Filter1Icon from "@mui/icons-material/Filter1";
 
 type Props = TextFieldProps & {
     placeholder?: string;
@@ -83,7 +84,13 @@ export const SearchField: FC<Props> = memo(({ placeholder, ...props }) => {
             InputProps={{
                 startAdornment: (
                     <InputAdornment position="start">
-                        <Icon Component={SearchIcon} />
+                        <Icon
+                            Component={
+                                props.type === "number"
+                                    ? Filter1Icon
+                                    : SearchIcon
+                            }
+                        />
                     </InputAdornment>
                 ),
             }}

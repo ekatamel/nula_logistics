@@ -44,6 +44,8 @@ export const ProductPage = () => {
 
     const queryKey = `/api/products?${urlParams}`;
 
+    const { data: products } = useQuery<Product[]>(queryKey, fetchProducts);
+
     const fetchSuppliers = async () => {
         const response = await axios(`/api/suppliers`);
         return response.data;
@@ -52,8 +54,6 @@ export const ProductPage = () => {
         `/api/suppliers`,
         fetchSuppliers
     );
-
-    const { data: products } = useQuery<Product[]>(queryKey, fetchProducts);
 
     return (
         <PageLayoutWrapper>
@@ -65,6 +65,7 @@ export const ProductPage = () => {
                         <SearchField
                             fullWidth
                             name="searchString"
+                            type={"text"}
                             onChange={handleFilterChange}
                             placeholder="Search product by name"
                         />

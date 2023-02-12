@@ -13,6 +13,7 @@ import { ThemeProvider } from "@material-ui/core";
 import { theme } from "../../styles/muiThemes";
 import { SnackProvider } from "./shared/SnackProvider";
 import { SupplierPage } from "./supplier/SupplierPage";
+import { Layout } from "./layout/Layout";
 
 const App = () => {
     const queryClient = new QueryClient();
@@ -29,9 +30,11 @@ const App = () => {
         <React.StrictMode>
             <ThemeProvider theme={theme}>
                 <QueryClientProvider client={queryClient}>
-                    <SnackProvider>
-                        {<RouterProvider router={router} />}
-                    </SnackProvider>
+                    <Layout>
+                        <SnackProvider>
+                            {<RouterProvider router={router} />}
+                        </SnackProvider>
+                    </Layout>
                 </QueryClientProvider>
             </ThemeProvider>
         </React.StrictMode>

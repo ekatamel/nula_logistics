@@ -1,31 +1,50 @@
 import React from "react";
 import { TableRow, TableCell, IconButton, Chip } from "@material-ui/core";
+import { MoneyFormatter, dateFormatter } from "../../utils/formatters";
 import { ItemField } from "../shared/ItemField";
 import { TextFieldData } from "../../utils/types/TextFieldData";
-import { useQueryNotification } from "../../utils/utils";
+import { SelectFieldData } from "../../utils/types/SelectFieldData";
+import {
+    getSupplierSelectGroup,
+    useQueryNotification,
+} from "../../utils/utils";
 import styled from "styled-components";
 import ArchiveIcon from "@material-ui/icons/Archive";
-import { useMutation, useQueryClient } from "react-query";
+import { useMutation, useQuery, useQueryClient } from "react-query";
 import axios from "axios";
-import { Supplier } from "../../utils/types";
+import { Supplier, Warehouse } from "../../utils/types";
 
 interface Props {
-    supplier: Supplier;
+    warehouse: Warehouse;
+    suppliers?: Supplier[];
+    queryKey: string;
 }
 
-export const TableSupplierRow = ({ supplier }: Props) => {
+export const TableWarehouseRow = ({
+    warehouse,
+    queryKey,
+    suppliers,
+}: Props) => {
     const queryClient = useQueryClient();
-    const { id, name, address, products } = supplier;
+
+    const suppliersSelect = suppliers && getSupplierSelectGroup(suppliers);
+    const {
+        id,
+        address,
+        supplier,
+        products,
+        product_count: totalProducts,
+    } = warehouse;
     const { successNotification, errorNotification } = useQueryNotification();
 
     const deleteProduct = (id: number) => {
-        return axios.delete(`/api/suppliers/${id}`);
+        return axios.delete(`/api/warehouses/${id}`);
     };
 
     const handleDelete = useMutation(deleteProduct, {
         onSuccess: async () => {
-            await queryClient.refetchQueries("/api/suppliers");
-            successNotification("Supplier was deleted!");
+            await queryClient.refetchQueries(queryKey);
+            successNotification("Warehouse was deleted!");
         },
         onError: (error: any) => {
             if (error.status != 422) {
@@ -36,28 +55,36 @@ export const TableSupplierRow = ({ supplier }: Props) => {
         },
     });
 
-    console.log("products", products);
-
     return (
         <TableRow>
             <TableCell>{id}</TableCell>
             <TableCell>
                 <ItemField
-                    updatableField={new TextFieldData(name, "name")}
-                    updatePath={`/api/suppliers/${id}`}
+                    updatableField={new TextFieldData(address, "address")}
+                    updatePath={`/api/warehouses/${id}`}
                     error={""}
                     noPadding={true}
                     updatable={true}
+                    queryKey={queryKey}
                 />
             </TableCell>
             <TableCell>
-                <ItemField
-                    updatableField={new TextFieldData(address, "price")}
-                    updatePath={`/api/suppliers/${id}`}
-                    error={""}
-                    noPadding={true}
-                    updatable={true}
-                />
+                {suppliersSelect && (
+                    <ItemField
+                        updatableField={
+                            new SelectFieldData(
+                                supplier.id,
+                                "supplier_id",
+                                suppliersSelect
+                            )
+                        }
+                        updatePath={`/api/warehouses/${id}`}
+                        error={""}
+                        noPadding={true}
+                        updatable={true}
+                        queryKey={queryKey}
+                    />
+                )}
             </TableCell>
             <TableCell>
                 <ChipContainer>
@@ -66,6 +93,7 @@ export const TableSupplierRow = ({ supplier }: Props) => {
                     ))}
                 </ChipContainer>
             </TableCell>
+            <TableCell>{totalProducts}</TableCell>
             <TableCell>
                 <ActionButtons>
                     <IconButton onClick={() => handleDelete.mutate(id)}>

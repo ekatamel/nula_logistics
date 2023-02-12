@@ -81,6 +81,12 @@ export const createMuiAppThemeOverrides: OverridesFunc = (theme) => ({
         },
     },
 
+    MuiListItemIcon: {
+        root: {
+            color: colors.white,
+        },
+    },
+
     MuiButton: {
         root: {
             borderRadius: 4,
@@ -300,6 +306,12 @@ export const createMuiAppThemeOverrides: OverridesFunc = (theme) => ({
     MuiDrawer: {
         paperAnchorDockedLeft: {
             borderRight: "none",
+        },
+    },
+    MuiChip: {
+        root: {
+            backgroundColor: "#0077B6",
+            color: colors.white,
         },
     },
     MuiTooltip: {

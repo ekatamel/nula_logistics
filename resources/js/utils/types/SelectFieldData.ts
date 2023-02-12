@@ -17,7 +17,7 @@ export class SelectFieldData extends UpdatableField {
     }
 
     getLabel(): string {
-        const foundOption = this.options.find((option) => {
+        const foundOption = this.options?.find((option) => {
             if (!this.defaultValue) {
                 if (!option.value) return true;
             }

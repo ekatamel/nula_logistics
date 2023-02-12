@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useMemo, useState } from "react";
 import { useQuery } from "react-query";
 import { PageLayoutWrapper } from "../shared/PageLayoutWrapper";
 import styled from "styled-components";
@@ -23,8 +23,7 @@ export const initialState = {
 };
 
 export const SupplierPage = () => {
-    const { searchString, handleFilterChange } = useSearchFieldState();
-    const [filters, setFilters] = useState<ProductFilter>(initialState);
+    const { searchString, handleFilterChange, compare } = useSearchFieldState();
     const [dialogOpened, setDialogOpened] = useState(false);
 
     const fetchSuppliers = async () => {
@@ -34,6 +33,16 @@ export const SupplierPage = () => {
     const { isLoading, data: suppliers } = useQuery<Supplier[]>(
         `/api/suppliers`,
         fetchSuppliers
+    );
+
+    const filteredSuppliers = useMemo(
+        () =>
+            searchString
+                ? suppliers?.filter((supplier) =>
+                      compare([supplier.name, supplier.address])
+                  )
+                : suppliers,
+        [suppliers, searchString]
     );
 
     return (
@@ -47,26 +56,22 @@ export const SupplierPage = () => {
                             fullWidth
                             name="searchString"
                             onChange={handleFilterChange}
-                            placeholder="Search product by name"
+                            placeholder="Search supplier by name or address"
                         />
                         <Button
                             kind={"primary"}
                             onClick={() => setDialogOpened(true)}
                         >
                             <PlusIcon color={colors.white} />{" "}
-                            <ButtonText>Add new product</ButtonText>
+                            <ButtonText>Add new supplier</ButtonText>
                         </Button>
                     </SearchBlock>
-
-                    <ProductListContainer>
-                        <Typography variant={"overline"}>Products</Typography>
-                        {suppliers && (
-                            <SuppliersTable
-                                isLoading={isLoading}
-                                suppliers={suppliers}
-                            />
-                        )}
-                    </ProductListContainer>
+                    {suppliers && (
+                        <SuppliersTable
+                            isLoading={isLoading}
+                            suppliers={filteredSuppliers}
+                        />
+                    )}
                     <AddNewSupplier
                         dialogOpened={dialogOpened}
                         setDialogOpened={setDialogOpened}
@@ -92,20 +97,6 @@ const StyledPaper = styled(Paper)`
 
     ${atMinWidth.desktop} {
         padding: 48px 64px;
-    }
-`;
-
-const ProductListContainer = styled.div`
-    padding-top: 2em;
-    display: grid;
-    gap: 5rem;
-    grid-template-columns: 250px 1fr;
-    ${theme.breakpoints.between("md", "lg")} {
-        grid-template-columns: 160px 1fr;
-    }
-    ${theme.breakpoints.down("sm")} {
-        padding-bottom: 2em;
-        display: block;
     }
 `;
 

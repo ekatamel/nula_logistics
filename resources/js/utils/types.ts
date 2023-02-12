@@ -1,12 +1,18 @@
 import { FormikHelpers } from "formik";
 
-export type ProductFilter = {
+export interface ProductFilter {
     name: string;
     priceFrom: string;
     priceTo: string;
     dateAddedFrom: string;
     dateAddedTo: string;
-};
+}
+
+export interface WarehouseFilter {
+    query: string;
+    totalProductsFrom: string;
+    totalProductsTo: string;
+}
 
 export enum SearchInputType {
     text = "text",
@@ -44,4 +50,13 @@ export interface Supplier {
     warehouses: Warehouse;
 }
 
-export interface Warehouse {}
+export interface Warehouse {
+    id: number;
+    name: string;
+    address: string;
+    supplier: Supplier;
+    products: Product[];
+    created_at: string;
+    updated_at: string;
+    product_count: number;
+}

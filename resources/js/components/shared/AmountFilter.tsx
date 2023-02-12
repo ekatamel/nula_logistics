@@ -2,16 +2,20 @@ import React, { FC, useCallback } from "react";
 import styled from "styled-components";
 import { SearchField } from "../shared/SearchField";
 import { Typography, debounce } from "@material-ui/core";
-import { ProductFilter, SearchInputType } from "../../utils/types";
+import {
+    ProductFilter,
+    SearchInputType,
+    WarehouseFilter,
+} from "../../utils/types";
 
 type Props = {
-    filters: ProductFilter;
-    setFilters: (filters: ProductFilter) => void;
+    filters: ProductFilter | WarehouseFilter;
+    setFilters: (filters: ProductFilter | WarehouseFilter) => void;
 };
 
 export const AmountFilter: FC<Props> = ({ filters, setFilters }) => {
     const debouncer = useCallback(
-        debounce((filter: ProductFilter) => {
+        debounce((filter: ProductFilter | WarehouseFilter) => {
             setFilters(filter);
         }, 300),
         []
@@ -31,7 +35,11 @@ export const AmountFilter: FC<Props> = ({ filters, setFilters }) => {
                 </StyledTypography>
                 <SearchField
                     type={SearchInputType.number}
-                    name="priceFrom"
+                    name={
+                        filters.hasOwnProperty("priceFrom")
+                            ? "priceFrom"
+                            : "totalProductsFrom"
+                    }
                     inputProps={{ inputProps: { min: 0 } }}
                     onChange={handleAmountChange}
                 />
@@ -42,7 +50,11 @@ export const AmountFilter: FC<Props> = ({ filters, setFilters }) => {
                 </StyledTypography>
                 <SearchField
                     type={SearchInputType.number}
-                    name="priceTo"
+                    name={
+                        filters.hasOwnProperty("priceTo")
+                            ? "priceTo"
+                            : "totalProductsTo"
+                    }
                     inputProps={{ inputProps: { min: 0 } }}
                     onChange={handleAmountChange}
                 />

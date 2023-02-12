@@ -9,6 +9,7 @@ import {
 } from "@material-ui/core";
 import { Supplier } from "../../utils/types";
 import { TableSupplierRow } from "./TableSupplierRow";
+import styled from "styled-components";
 
 interface Props {
     isLoading: boolean;
@@ -18,13 +19,14 @@ interface Props {
 export const SuppliersTable = ({ isLoading, suppliers }: Props) => {
     const areNoSuppliers = !suppliers || suppliers?.length === 0;
     return (
-        <TableContainer>
+        <StyledTableContainer>
             <Table>
                 <TableHead>
                     <TableRow>
                         <TableCell>#</TableCell>
                         <TableCell>Supplier's name</TableCell>
                         <TableCell>Address</TableCell>
+                        <TableCell>Products</TableCell>
                         <TableCell>Actions</TableCell>
                     </TableRow>
                 </TableHead>
@@ -44,6 +46,10 @@ export const SuppliersTable = ({ isLoading, suppliers }: Props) => {
                     ))}
                 </TableBody>
             </Table>
-        </TableContainer>
+        </StyledTableContainer>
     );
 };
+
+const StyledTableContainer = styled(TableContainer)`
+    margin-top: 2rem;
+`;

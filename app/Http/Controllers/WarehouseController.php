@@ -9,11 +9,29 @@ use App\Models\ProductWarehouse;
 
 class WarehouseController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
+        $query = $request->input('query');
+        $total_products_from = $request->input('total_products_from');
+        $total_products_to = $request->input('total_products_to');
+
         $warehouses = Warehouse::with([
             'productWarehouses.product.supplier'
-        ])->get();
+        ]);
+
+        if ($query) {
+            $warehouses = $warehouses->whereHas('productWarehouses.product.supplier', function ($q) use ($query) {
+                $q->where('name', 'like', "%{$query}%");
+            })->orWhere('address', 'like', "%{$query}%");
+        }
+        if ($total_products_from) {
+            $warehouses = $warehouses->where('product_count', '>=', $total_products_from);
+        }
+        if ($total_products_to) {
+            $warehouses = $warehouses->where('product_count', '<=', $total_products_to);
+        }
+
+        $warehouses = $warehouses->get();
 
         $result = [];
         foreach ($warehouses as $warehouse) {
@@ -47,6 +65,7 @@ class WarehouseController extends Controller
         return response()->json($result);
     }
 
+
     public function show($id)
     {
         $warehouse = Warehouse::with([
@@ -72,6 +91,7 @@ class WarehouseController extends Controller
         $result =
             [
                 'id' => $warehouse->id,
+                'supplier' => $warehouse->supplier,
                 'address' => $warehouse->address,
                 'product_count' => $warehouse->product_count,
                 'created_at' => $warehouse->created_at,
@@ -109,10 +129,10 @@ class WarehouseController extends Controller
             "supplier_id" => "numeric",
         ]);
 
-        $warehouse = Warehouse::with(['products', 'supplier'])->findOrFail($id);
+        $warehouse = Warehouse::findOrFail($id);
 
         $warehouse->supplier_id = $request->input('supplier_id') ?? $warehouse->supplier_id;
-        $warehouse->address = $request->input('address') ?? $warehouse->supplier_id;
+        $warehouse->address = $request->input('address') ?? $warehouse->address;
 
         $warehouse->save();
 
