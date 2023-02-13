@@ -14,6 +14,7 @@ import { theme } from "../../styles/muiThemes";
 import { SnackProvider } from "./shared/SnackProvider";
 import { SupplierPage } from "./supplier/SupplierPage";
 import { Layout } from "./layout/Layout";
+import { WarehouseDetailPage } from "./warehouse/WarehouseDetailPage";
 
 const App = () => {
     const queryClient = new QueryClient();
@@ -23,21 +24,20 @@ const App = () => {
             <Route path="/products" element={<ProductPage />} />,
             <Route path="/suppliers" element={<SupplierPage />} />,
             <Route path="/warehouses" element={<WarehousePage />} />,
+            <Route path="/warehouses/:id" element={<WarehouseDetailPage />} />,
         ])
     );
 
     return (
-        <React.StrictMode>
-            <ThemeProvider theme={theme}>
-                <QueryClientProvider client={queryClient}>
-                    <Layout>
-                        <SnackProvider>
-                            {<RouterProvider router={router} />}
-                        </SnackProvider>
-                    </Layout>
-                </QueryClientProvider>
-            </ThemeProvider>
-        </React.StrictMode>
+        <ThemeProvider theme={theme}>
+            <QueryClientProvider client={queryClient}>
+                <Layout>
+                    <SnackProvider>
+                        {<RouterProvider router={router} />}
+                    </SnackProvider>
+                </Layout>
+            </QueryClientProvider>
+        </ThemeProvider>
     );
 };
 

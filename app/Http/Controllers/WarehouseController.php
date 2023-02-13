@@ -41,7 +41,7 @@ class WarehouseController extends Controller
                     'id' => $productWarehouse->product->id,
                     'name' => $productWarehouse->product->name,
                     'price' => $productWarehouse->product->price,
-                    'quantity' => $productWarehouse->product->quantity,
+                    'quantity' => $productWarehouse->quantity,
                     'supplier' => [
                         'id' => $productWarehouse->product->supplier->id,
                         'name' => $productWarehouse->product->supplier->name,
@@ -78,12 +78,14 @@ class WarehouseController extends Controller
                 'id' => $productWarehouse->product->id,
                 'name' => $productWarehouse->product->name,
                 'price' => $productWarehouse->product->price,
-                'quantity' => $productWarehouse->product->quantity,
+                'quantity' => $productWarehouse->quantity,
                 'supplier' => [
                     'id' => $productWarehouse->product->supplier->id,
                     'name' => $productWarehouse->product->supplier->name,
                     'address' => $productWarehouse->product->supplier->address,
                 ],
+                'created_at' => $productWarehouse->product->created_at,
+                'updated_at' => $productWarehouse->product->updated_at,
             ];
             $products[] = $product;
         }
@@ -147,22 +149,33 @@ class WarehouseController extends Controller
         session()->flash("success", 'The warehouse was successfully deleted!');
     }
 
-    public function storeProduct(Request $request)
+    public function assignProductToWarehouse(Request $request, $warehouseId)
     {
         $validatedData = $request->validate([
-            'product_id' => 'required|exists:products,id',
-            'warehouse_id' => 'required|exists:warehouses,id',
+            'product_id' => 'required|integer',
             'quantity' => 'required|integer',
         ]);
 
-        $product = Product::findOrFail($validatedData['product_id']);
-        $warehouse = Warehouse::findOrFail($validatedData['warehouse_id']);
+        $product_id = $request->input('product_id') ?? null;
+
+        $warehouse = Warehouse::findOrFail($warehouseId);
+        $product = Product::findOrFail($product_id);
+
+        $pivot = $product->warehouses()->wherePivot('warehouse_id', $warehouseId)->first();
+
+        if ($pivot) {
+            $product->warehouses()->updateExistingPivot($warehouseId, [
+                'quantity' => $validatedData['quantity'],
+            ]);
+        } else {
+            $product->warehouses()->attach($warehouse, [
+                'quantity' => $validatedData['quantity'],
+            ]);
+        }
+
+
 
         $warehouse->updateProductCount();
-
-        $product->warehouses()->attach($warehouse, [
-            'quantity' => $validatedData['quantity'],
-        ]);
 
         return response()->json(['message' => 'Product assigned to warehouse successfully'], 201);
     }

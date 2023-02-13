@@ -57,7 +57,9 @@ export const TableWarehouseRow = ({
 
     return (
         <TableRow>
-            <TableCell>{id}</TableCell>
+            <TableCell>
+                <a href={`/warehouses/${id}`}>{id}</a>
+            </TableCell>
             <TableCell>
                 <ItemField
                     updatableField={new TextFieldData(address, "address")}

@@ -38,6 +38,7 @@ export interface Product {
     warehouses: Warehouse[];
     created_at: string;
     updated_at: string;
+    quantity: number;
 }
 
 export interface Supplier {
@@ -59,4 +60,33 @@ export interface Warehouse {
     created_at: string;
     updated_at: string;
     product_count: number;
+}
+
+export type DataLine = {
+    label: string;
+    description?: string;
+    updatableFields?: UpdatableField[];
+    notUpdatableFields?: number | JSX.Element;
+    deleteIcon?: boolean;
+};
+
+export abstract class UpdatableField {
+    fieldName: string;
+    defaultValue: string | number | boolean | Date;
+    keepVisible: boolean;
+    alternatePath: string;
+
+    protected constructor(
+        defaultValue: string | number | boolean | Date,
+        fieldName: string,
+        alternatePath = ""
+    ) {
+        this.defaultValue = defaultValue;
+        this.fieldName = fieldName;
+        this.alternatePath = alternatePath;
+    }
+
+    getLabel(): string {
+        return this.defaultValue ? String(this.defaultValue) : "-";
+    }
 }

@@ -7,20 +7,15 @@ import {
     Toolbar,
     useMediaQuery,
     useTheme,
+    Paper,
 } from "@material-ui/core";
 import styled from "styled-components";
-// import { Logo } from "../../components/Icon/icons/Logo.icon";
 import { colors } from "../../../styles/colors";
-// import { NavGroup, NavGroupProps } from "./components/NavGroup";
 import MenuIcon from "@material-ui/icons/Menu";
 import { theme } from "../../../styles/muiThemes";
 import { Icon } from "../../../assets/icons/Icon";
 import { Button } from "../shared/Button";
 import { NavGroup } from "./NavGroup";
-
-// type Props = {
-//     items: NavGroupProps[];
-// };
 
 export const Navigation = () => {
     const theme = useTheme();
@@ -37,15 +32,9 @@ export const Navigation = () => {
 
     return (
         <nav>
-            {/* <Hidden mdUp implementation={"css"}>
+            <StyledPaper>
                 <AppBar position="fixed">
                     <MyToolbar>
-                        <ToolbarLogo>
-                            <a href="/admin/">
-                                <Logo />
-                            </a>
-                        </ToolbarLogo>
-
                         <Hamburger>
                             <IconButton
                                 color="inherit"
@@ -58,7 +47,7 @@ export const Navigation = () => {
                         </Hamburger>
                     </MyToolbar>
                 </AppBar>
-            </Hidden> */}
+            </StyledPaper>
             <StyledDrawer
                 anchor={mobileVersion ? "right" : "left"}
                 open={mobileVersion ? open : true}
@@ -67,19 +56,7 @@ export const Navigation = () => {
                 variant={mobileVersion ? "temporary" : "persistent"}
             >
                 <DrawerContent>
-                    {/* <ContentGrid> */}
-
                     <NavGroup />
-                    {/* </ContentGrid> */}
-
-                    {/* <LogoutButton
-                        fullWidth
-                        kind="primary"
-                        href={"/logout"}
-                        size={"small"}
-                    >
-                        Sign out
-                    </LogoutButton> */}
                 </DrawerContent>
             </StyledDrawer>
         </nav>
@@ -91,14 +68,10 @@ const MyToolbar = styled(Toolbar)`
     grid-template-columns: 1fr 20px 1fr;
 `;
 
-const ToolbarLogo = styled.div`
-    grid-column: 2;
-    padding: 11px 0;
-`;
-
 const Hamburger = styled.div`
     grid-column: 3;
     justify-self: flex-end;
+    margin-left: auto;
 `;
 
 const StyledDrawer = styled(SwipeableDrawer)`
@@ -120,18 +93,17 @@ const DrawerContent = styled.div`
     width: 250px;
 `;
 
-const ContentGrid = styled.div`
-    display: grid;
-    align-content: start;
-    grid-template-columns: 1fr;
-    grid-row-gap: 24px;
-`;
-
 const LogoutButton = styled(Button)`
     color: white;
 
     &:hover {
         color: white;
         background-color: rgba(255, 255, 255, 0.05) !important;
+    }
+`;
+
+const StyledPaper = styled(Paper)`
+    ${theme.breakpoints.up("md")} {
+        display: none;
     }
 `;

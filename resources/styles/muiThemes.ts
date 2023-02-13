@@ -67,8 +67,9 @@ export const createMuiAppThemeOverrides: OverridesFunc = (theme) => ({
             fontFamily: "Tahoma",
             fontWeight: "bold",
             fontStyle: "normal",
-            fontSize: "14px",
-            lineHeight: "14px",
+            fontSize: "30px",
+            lineHeight: "26px",
+            color: "#023E8A",
         },
     },
 
@@ -119,6 +120,11 @@ export const createMuiAppThemeOverrides: OverridesFunc = (theme) => ({
                 boxShadow: "none",
                 transition: ".3s",
             },
+        },
+
+        textPrimary: {
+            text: `${colors.brandBlue} !important`,
+            border: `1px solid ${colors.brandBlue}`,
         },
 
         text: {

@@ -3,6 +3,7 @@
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ProductController;
+use App\Http\Controllers\StatsController;
 use App\Http\Controllers\SupplierController;
 use App\Http\Controllers\WarehouseController;
 
@@ -89,6 +90,12 @@ Route::delete('/warehouses/{id}', [
     WarehouseController::class, "destroy"
 ])->whereNumber("id")->name("warehouses.destroy");
 
-Route::post('/warehouses/{id}/products', [
-    WarehouseController::class, 'storeProduct'
-])->whereNumber("id");
+Route::patch('/warehouses/{warehouseId}/products', [
+    WarehouseController::class, 'assignProductToWarehouse'
+])->whereNumber("warehouseId");
+
+// STATS routes
+
+Route::get('/stats', [
+    StatsController::class, "statistics"
+]);
