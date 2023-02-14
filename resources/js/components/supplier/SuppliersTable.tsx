@@ -1,4 +1,4 @@
-import React, { FC } from "react";
+import React from "react";
 import {
     TableContainer,
     Table,
@@ -12,11 +12,10 @@ import { TableSupplierRow } from "./TableSupplierRow";
 import styled from "styled-components";
 
 interface Props {
-    isLoading: boolean;
     suppliers?: Supplier[];
 }
 
-export const SuppliersTable = ({ isLoading, suppliers }: Props) => {
+export const SuppliersTable = ({ suppliers }: Props) => {
     const areNoSuppliers = !suppliers || suppliers?.length === 0;
     return (
         <StyledTableContainer>

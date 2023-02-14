@@ -40,7 +40,7 @@ export const WarehousePage = () => {
 
     const queryKey = `/api/warehouses?${urlParams}`;
 
-    const { isLoading, data: warehouses } = useQuery<Warehouse[]>(
+    const { data: warehouses } = useQuery<Warehouse[] | undefined>(
         queryKey,
         fetchWarehouses
     );
@@ -89,7 +89,6 @@ export const WarehousePage = () => {
                                 <WarehousesTable
                                     warehouses={warehouses}
                                     suppliers={suppliers}
-                                    isLoading={isLoading}
                                     queryKey={queryKey}
                                 />
                             )}

@@ -4,23 +4,14 @@ import { PageLayoutWrapper } from "../shared/PageLayoutWrapper";
 import styled from "styled-components";
 import { Paper, Typography } from "@material-ui/core";
 import { atMinWidth } from "../../../styles/helpers";
-import { theme } from "../../../styles/muiThemes";
 import { SearchField, useSearchFieldState } from "../shared/SearchField";
 import axios from "axios";
-import { ProductFilter, Product, Supplier } from "../../utils/types";
+import { Supplier } from "../../utils/types";
 import { Button } from "../shared/Button";
 import { PlusIcon } from "../../../assets/icons/Plus.icon";
 import { colors } from "../../../styles/colors";
 import { SuppliersTable } from "./SuppliersTable";
 import { AddNewSupplier } from "./AddNewSupplier";
-
-export const initialState = {
-    name: "",
-    priceFrom: "",
-    priceTo: "",
-    dateAddedFrom: "",
-    dateAddedTo: "",
-};
 
 export const SupplierPage = () => {
     const { searchString, handleFilterChange, compare } = useSearchFieldState();
@@ -67,10 +58,7 @@ export const SupplierPage = () => {
                         </Button>
                     </SearchBlock>
                     {suppliers && (
-                        <SuppliersTable
-                            isLoading={isLoading}
-                            suppliers={filteredSuppliers}
-                        />
+                        <SuppliersTable suppliers={filteredSuppliers} />
                     )}
                     <AddNewSupplier
                         dialogOpened={dialogOpened}

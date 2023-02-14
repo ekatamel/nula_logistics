@@ -8,7 +8,6 @@ import { Button } from "../shared/Button";
 import { useCustomMutation, Mutation } from "../../utils/useCustomMutation";
 import { useQueryNotification } from "../../utils/utils";
 import { FormikSubmitHandler, Product, Supplier } from "../../utils/types";
-import { FormSelect } from "../shared/FormSelect";
 import { AxiosError } from "axios";
 
 interface Props {
@@ -143,14 +142,4 @@ const ButtonWrapper = styled.div`
 `;
 const StyledModal = styled(ContentPaper)`
     margin: 10px 30px;
-`;
-
-const StyledFormSelect = styled(FormSelect)`
-    margin-top: 1.5rem;
-`;
-
-const StyledError = styled.p`
-    font-family: Tahoma;
-    color: #f44336;
-    font-size: 14px;
 `;

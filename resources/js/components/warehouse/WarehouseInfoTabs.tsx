@@ -2,7 +2,7 @@ import React from "react";
 import { TextFieldData } from "../../utils/types/TextFieldData";
 import { UpdatableItemsGroup } from "../shared/formFields/UpdatableItemsGroup";
 import { SelectFieldData } from "../../utils/types/SelectFieldData";
-import { Product, SelectItem, Supplier, Warehouse } from "../../utils/types";
+import { Product, SelectItem, Warehouse } from "../../utils/types";
 import styled from "styled-components";
 import { Chip } from "@material-ui/core";
 

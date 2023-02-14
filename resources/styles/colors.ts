@@ -1,3 +1,5 @@
+//TODO delete unused colors
+
 export const colors = {
     brand: "#14141F",
     brandLight: "rgba(20,20,31,0.88)",

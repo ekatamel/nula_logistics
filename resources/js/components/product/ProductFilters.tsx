@@ -13,7 +13,7 @@ type Props = {
 };
 
 export const ProductFilters: FC<Props> = ({ filters, setFilters }) => {
-    // REPLACE BY BETTER SOLUTION
+    // TODO REPLACE BY BETTER SOLUTION
     const clearFilters = () => {
         const inputs = document.querySelectorAll(
             "input"

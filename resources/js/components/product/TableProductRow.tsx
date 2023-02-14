@@ -1,6 +1,6 @@
 import React from "react";
 import { TableRow, TableCell, IconButton } from "@material-ui/core";
-import { MoneyFormatter, dateFormatter } from "../../utils/formatters";
+import { dateFormatter } from "../../utils/formatters";
 import { ItemField } from "../shared/ItemField";
 import { TextFieldData } from "../../utils/types/TextFieldData";
 import { SelectFieldData } from "../../utils/types/SelectFieldData";
@@ -25,10 +25,7 @@ export const TableProductRow = ({ product, queryKey, suppliers }: Props) => {
     const { id, name, price, created_at, supplier } = product;
     const { successNotification, errorNotification } = useQueryNotification();
 
-    // TODO FIX
-    const priceFormatted = new MoneyFormatter("CZK").format(Number(price));
     const parsedDate = dateFormatter(created_at);
-
     const suppliersSelect = suppliers && getSupplierSelectGroup(suppliers);
 
     const deleteProduct = (id: number) => {

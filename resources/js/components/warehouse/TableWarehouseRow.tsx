@@ -1,6 +1,5 @@
 import React from "react";
 import { TableRow, TableCell, IconButton, Chip } from "@material-ui/core";
-import { MoneyFormatter, dateFormatter } from "../../utils/formatters";
 import { ItemField } from "../shared/ItemField";
 import { TextFieldData } from "../../utils/types/TextFieldData";
 import { SelectFieldData } from "../../utils/types/SelectFieldData";

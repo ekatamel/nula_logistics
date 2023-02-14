@@ -34,10 +34,7 @@ export const WarehouseDetailPage = () => {
 
     const queryKey = `/api/warehouses/${id}`;
 
-    const { isLoading, data: warehouse } = useQuery<Warehouse>(
-        queryKey,
-        fetchWarehouse
-    );
+    const { data: warehouse } = useQuery<Warehouse>(queryKey, fetchWarehouse);
 
     const fetchSuppliers = async () => {
         const response = await axios(`/api/suppliers`);
@@ -61,7 +58,7 @@ export const WarehouseDetailPage = () => {
         <PageLayoutWrapper>
             {warehouse && (
                 <Grid>
-                    <StyledPaper>
+                    <StyledPaper elevation={10}>
                         <Typography variant="h3">Warehouse</Typography>
                         {suppliersSelect && (
                             <WarehouseInfoTabs
@@ -70,7 +67,7 @@ export const WarehouseDetailPage = () => {
                             />
                         )}
                     </StyledPaper>
-                    <StyledPaper>
+                    <StyledPaper elevation={10}>
                         <Typography variant="h3">Location</Typography>
                         {src && (
                             <iframe
@@ -84,7 +81,7 @@ export const WarehouseDetailPage = () => {
                             />
                         )}
                     </StyledPaper>
-                    <StyledLargePaper>
+                    <StyledLargePaper elevation={10}>
                         <TableHeaderContainer>
                             <Typography variant="h3">
                                 Products management

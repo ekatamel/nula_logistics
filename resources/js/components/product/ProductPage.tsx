@@ -50,7 +50,7 @@ export const ProductPage = () => {
         const response = await axios(`/api/suppliers`);
         return response.data;
     };
-    const { isLoading, data: suppliers } = useQuery<Supplier[]>(
+    const { data: suppliers } = useQuery<Supplier[]>(
         `/api/suppliers`,
         fetchSuppliers
     );
@@ -90,7 +90,6 @@ export const ProductPage = () => {
                             {products && (
                                 <ProductsTable
                                     products={products}
-                                    isLoading={isLoading}
                                     queryKey={queryKey}
                                     suppliers={suppliers}
                                 />

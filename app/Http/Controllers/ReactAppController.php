@@ -8,6 +8,6 @@ class ReactAppController extends Controller
 {
     public function renderApp()
     {
-        return view('react'); // react.blade.php renders our react application
+        return view('react'); // react.blade.php renders react application
     }
 }

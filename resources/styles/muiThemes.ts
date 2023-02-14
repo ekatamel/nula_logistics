@@ -5,6 +5,8 @@ import { AlertClassKey } from "@material-ui/lab";
 import { CSSProperties } from "react";
 import { size } from "./helpers";
 
+// TODO remove unused MUI properties
+
 const themes = createTheme({
     palette: {
         primary: {
@@ -260,21 +262,6 @@ export const createMuiAppThemeOverrides: OverridesFunc = (theme) => ({
             borderRadius: 0,
         },
     },
-    MuiPopover: {
-        root: {
-            display: "grid",
-            placeItems: "center",
-        },
-    },
-    MuiCardMedia: {
-        root: {
-            height: "24px",
-        },
-        media: {
-            height: "34px",
-        },
-    },
-
     MuiSnackbarContent: {
         root: {
             color: colors.black,

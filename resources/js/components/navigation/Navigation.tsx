@@ -1,7 +1,6 @@
-import React, { FC, useState } from "react";
+import React, { useState } from "react";
 import {
     AppBar,
-    Hidden,
     IconButton,
     SwipeableDrawer,
     Toolbar,
@@ -10,13 +9,12 @@ import {
     Paper,
 } from "@material-ui/core";
 import styled from "styled-components";
-import { colors } from "../../../styles/colors";
 import MenuIcon from "@material-ui/icons/Menu";
 import { theme } from "../../../styles/muiThemes";
-import { Icon } from "../../../assets/icons/Icon";
 import { Button } from "../shared/Button";
 import { NavGroup } from "./NavGroup";
 
+// TODO add logout button
 export const Navigation = () => {
     const theme = useTheme();
     const [open, setOpen] = useState(false);

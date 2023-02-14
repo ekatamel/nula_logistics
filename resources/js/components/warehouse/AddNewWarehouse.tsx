@@ -10,12 +10,7 @@ import {
     getSupplierSelectGroup,
     useQueryNotification,
 } from "../../utils/utils";
-import {
-    FormikSubmitHandler,
-    Product,
-    Supplier,
-    Warehouse,
-} from "../../utils/types";
+import { FormikSubmitHandler, Supplier, Warehouse } from "../../utils/types";
 import { FormSelect } from "../shared/FormSelect";
 import { AxiosError } from "axios";
 
@@ -87,7 +82,6 @@ export const AddNewWarehouse = ({
                         const {
                             values,
                             handleChange,
-                            touched,
                             errors,
                             resetForm,
                             submitForm,

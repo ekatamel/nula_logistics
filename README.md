@@ -30,6 +30,7 @@ PHP & Laravel:
 -   defining DB models and relationships
 -   seeding the database with products, suppliers, warehouses
 -   exposing API endpoints for frontend (React) usage
+-   filtering data results based on query parameters sent by frontend
 
 Databases:
 
@@ -40,14 +41,19 @@ Databases:
     Model is available at:
     https://dbdiagram.io/d/63e6bf94296d97641d801850
 
+API documentation:
+
+-   could be founed in....
+
 ### Frontend
 
 React:
 
 -   routing (React Router)
--   type definition and checking (TypeScript)2
+-   type definition and type checking (TypeScript)
 -   rendering pages and components
--   making API requests (React Query) to query data (GET) and mutate (POST, PATCH, DELETE) data
+-   making API requests (React Query) to query data (GET) and mutate (POST, PATCH, DELETE) data. For Mutation own custom hook is created.
+-   filtering data for not large amount (e.g. Suppliers)
 
 Additional React libraries used in this project:
 
@@ -98,3 +104,7 @@ API documentation is available at : https://app.swaggerhub.com/apis-docs/KATERIN
 
 -   Write unit and end-to-end tests
 -   Set-up CI/CD pipeline
+-   Add loader spinners while content is loaded, or page skeletons (loading state could be retreived from useQuery hook)
+-   Add pagination in case there is large number of entities (both on frontend and backend side)
+-   Set up Prettier, Linter in a project
+-   Provide frontend validation (apart from backend validation and Formik errors)

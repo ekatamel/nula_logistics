@@ -12,17 +12,11 @@ import { Product, Supplier } from "../../utils/types";
 
 interface Props {
     products: Product[];
-    isLoading: boolean;
     queryKey: string;
     suppliers?: Supplier[];
 }
 
-export const ProductsTable = ({
-    products,
-    isLoading,
-    queryKey,
-    suppliers,
-}: Props) => {
+export const ProductsTable = ({ products, queryKey, suppliers }: Props) => {
     const areNoProducts = !products || products?.length === 0;
     return (
         <TableContainer>

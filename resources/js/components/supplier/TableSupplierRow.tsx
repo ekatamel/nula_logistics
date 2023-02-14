@@ -36,8 +36,6 @@ export const TableSupplierRow = ({ supplier }: Props) => {
         },
     });
 
-    console.log("products", products);
-
     return (
         <TableRow>
             <TableCell>{id}</TableCell>

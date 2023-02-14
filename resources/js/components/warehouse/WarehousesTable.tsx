@@ -1,4 +1,4 @@
-import React, { FC } from "react";
+import React from "react";
 import {
     TableContainer,
     Table,
@@ -11,18 +11,12 @@ import { TableWarehouseRow } from "./TableWarehouseRow";
 import { Supplier, Warehouse } from "../../utils/types";
 
 interface Props {
-    warehouses: Warehouse[];
+    warehouses?: Warehouse[];
     suppliers?: Supplier[];
-    isLoading: boolean;
     queryKey: string;
 }
 
-export const WarehousesTable = ({
-    warehouses,
-    isLoading,
-    queryKey,
-    suppliers,
-}: Props) => {
+export const WarehousesTable = ({ warehouses, queryKey, suppliers }: Props) => {
     const areNoWarehouses = !warehouses || warehouses?.length === 0;
     return (
         <TableContainer>
@@ -46,7 +40,7 @@ export const WarehousesTable = ({
                     )}
                     {warehouses?.map((warehouse) => (
                         <TableWarehouseRow
-                            key={warehouse.id}
+                            key={warehouse?.id}
                             warehouse={warehouse}
                             queryKey={queryKey}
                             suppliers={suppliers}

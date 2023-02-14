@@ -1,7 +1,7 @@
 import React from "react";
 import { TableRow, TableCell } from "@material-ui/core";
 import { dateFormatter } from "../../utils/formatters";
-import { Product, Supplier } from "../../utils/types";
+import { Product } from "../../utils/types";
 import { ItemField } from "../shared/ItemField";
 import { TextFieldData } from "../../utils/types/TextFieldData";
 

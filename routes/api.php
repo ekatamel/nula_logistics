@@ -46,7 +46,6 @@ Route::delete('/products/{id}', [
 
 
 // SUPPLIER routes
-
 Route::get('/suppliers', [
     SupplierController::class, "index"
 ])->name("suppliers.index");
@@ -69,7 +68,6 @@ Route::delete('/suppliers/{id}', [
 
 
 // WAREHOUSE routes
-
 Route::get('/warehouses', [
     WarehouseController::class, "index"
 ])->name("warehouses.index");
@@ -95,7 +93,6 @@ Route::patch('/warehouses/{warehouseId}/products', [
 ])->whereNumber("warehouseId");
 
 // STATS routes
-
 Route::get('/stats', [
     StatsController::class, "statistics"
 ]);

@@ -11,12 +11,7 @@ import {
     getSupplierSelectGroup,
     useQueryNotification,
 } from "../../utils/utils";
-import {
-    FormikSubmitHandler,
-    Product,
-    Supplier,
-    Warehouse,
-} from "../../utils/types";
+import { FormikSubmitHandler, Product, Supplier } from "../../utils/types";
 import { FormSelect } from "../shared/FormSelect";
 import axios, { AxiosError } from "axios";
 
@@ -44,7 +39,7 @@ export const AssignProductToWarehouse = ({
         const response = await axios(`/api/suppliers`);
         return response.data;
     };
-    const { isLoading, data: suppliers } = useQuery<Supplier[]>(
+    const { data: suppliers } = useQuery<Supplier[]>(
         `/api/suppliers`,
         fetchSuppliers
     );
@@ -67,12 +62,11 @@ export const AssignProductToWarehouse = ({
     const newSubjectMutation = useCustomMutation(
         createNewSubjectMutation,
         {
-            onSuccess: async (data: Record<string, number | any>) => {
+            onSuccess: async () => {
                 await queryClient.refetchQueries(
                     `/api/warehouses/${warehouseId}`
                 );
                 successNotification("Product was successfully created!");
-
                 setDialogOpened(false);
             },
             onError: (error: AxiosError) => {
@@ -106,13 +100,10 @@ export const AssignProductToWarehouse = ({
                         const {
                             values,
                             handleChange,
-                            touched,
                             errors,
                             resetForm,
                             submitForm,
                         } = formikProps;
-
-                        console.log("errors", errors);
 
                         return (
                             <>

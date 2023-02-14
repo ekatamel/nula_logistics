@@ -13,21 +13,12 @@ import { Button } from "../shared/Button";
 import { PlusIcon } from "../../../assets/icons/Plus.icon";
 import { colors } from "../../../styles/colors";
 
-// TODO styles
 export const Dashboard = () => {
-    const useStyles = makeStyles({
-        root: {
-            backgroundColor: "#F0FBFD",
-        },
-    });
-
-    const classes = useStyles();
-
     const fetchSuppliers = async () => {
         const response = await axios(`/api/stats`);
         return response.data;
     };
-    const { isLoading, data: statistics } = useQuery<any>(
+    const { data: statistics } = useQuery<any>(
         `/api/suppliers`,
         fetchSuppliers
     );
@@ -41,9 +32,10 @@ export const Dashboard = () => {
 
     return (
         <PageLayoutWrapper>
+            {/* TODO give actial name from API */}
             <StyledTypography variant="h1">Hello, Ekaterina!</StyledTypography>
             <Grid>
-                <StyledPaper elevation={10} className={classes.root}>
+                <StyledPaper elevation={10}>
                     <Typography variant="h3">Statistics</Typography>
                     <StatsContainer>
                         <StatsGroup>
