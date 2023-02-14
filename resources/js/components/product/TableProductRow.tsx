@@ -72,22 +72,24 @@ export const TableProductRow = ({ product, queryKey, suppliers }: Props) => {
                     queryKey={queryKey}
                 />
             </TableCell>
-            <TableCell>
-                <ItemField
-                    updatableField={
-                        new SelectFieldData(
-                            supplier.id,
-                            "supplier_id",
-                            suppliersSelect
-                        )
-                    }
-                    updatePath={`/api/products/${id}`}
-                    error={""}
-                    noPadding={true}
-                    updatable={true}
-                    queryKey={queryKey}
-                />
-            </TableCell>
+            {suppliersSelect && (
+                <TableCell>
+                    <ItemField
+                        updatableField={
+                            new SelectFieldData(
+                                supplier.id,
+                                "supplier_id",
+                                suppliersSelect
+                            )
+                        }
+                        updatePath={`/api/products/${id}`}
+                        error={""}
+                        noPadding={true}
+                        updatable={true}
+                        queryKey={queryKey}
+                    />
+                </TableCell>
+            )}
             <TableCell>{parsedDate}</TableCell>
             <TableCell>
                 <ActionButtons>

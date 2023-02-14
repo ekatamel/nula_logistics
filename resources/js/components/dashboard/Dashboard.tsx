@@ -230,6 +230,6 @@ const StyledPaper = styled(Paper)`
         padding: 48px 3rem;
     }
     ${atMinWidth.desktop} {
-        padding: 48px 3rem;
+        padding: 64px 64px;
     }
 `;

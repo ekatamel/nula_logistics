@@ -29,8 +29,8 @@ export const getErrorsString = (errors: any[]): string => {
     return ret || "Error";
 };
 
-export const getSupplierSelectGroup = (suppliers: Supplier[]) => {
-    return suppliers.map((supplier: Supplier) => {
+export const getSupplierSelectGroup = (suppliers?: Supplier[]) => {
+    return suppliers?.map((supplier: Supplier) => {
         return { value: supplier.id.toString(), label: supplier.name };
     });
 };

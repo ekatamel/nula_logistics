@@ -70,6 +70,24 @@ Howw React app is rendered in Laravel project:
 
 5. Input script index.js renders App component, which provides Routes for React application and renders specific component based on URL
 
+## Local development environment
+
+In order to set up local development environment, follow these steps:
+
+1.
+
+```shell script
+docker-compose up -d
+```
+
+```shell script
+php artisan serve
+```
+
+```shell script
+npm run watch
+```
+
 ## API
 
 API endpoints for the frontend are handled by specific entity controller (e.g. ProductController, WarehouseController). Routes for these endpoints are provided in api.php.
@@ -79,4 +97,4 @@ API documentation is available at : https://app.swaggerhub.com/apis-docs/KATERIN
 ## Possible impovements
 
 -   Write unit and end-to-end tests
--
+-   Set-up CI/CD pipeline
