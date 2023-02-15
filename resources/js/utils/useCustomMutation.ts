@@ -2,7 +2,6 @@ import { useCallback } from "react";
 import { useMutation } from "react-query";
 import { UseMutationOptions } from "react-query/types/react/types";
 import { useQueryNotification } from "../utils/utils";
-import axios from "axios";
 
 type MutationFunction<TVariables, TData, TError, TContext> = (
     variables: TVariables
@@ -39,7 +38,7 @@ export function useCustomMutation<
         useCallback(
             async (variables) => {
                 const { method, path, params } = mutation(variables);
-                const token = localStorage.getItem("token") || "";
+                const token = localStorage.getItem("auth_token") || "";
                 const fetchOptions = {
                     method: method || "POST",
                     headers: new Headers({

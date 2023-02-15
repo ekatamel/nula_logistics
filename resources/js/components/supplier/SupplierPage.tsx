@@ -1,11 +1,10 @@
-import React, { useContext, useMemo, useState } from "react";
+import React, { useMemo, useState } from "react";
 import { useQuery } from "react-query";
 import { PageLayoutWrapper } from "../shared/PageLayoutWrapper";
 import styled from "styled-components";
 import { IconButton, Paper, Tooltip, Typography } from "@material-ui/core";
 import { atMinWidth } from "../../../styles/helpers";
 import { SearchField, useSearchFieldState } from "../shared/SearchField";
-import axios from "axios";
 import { Supplier } from "../../utils/types";
 import { Button } from "../shared/Button";
 import { PlusIcon } from "../../../assets/icons/Plus.icon";
@@ -14,17 +13,12 @@ import { SuppliersTable } from "./SuppliersTable";
 import { AddNewSupplier } from "./AddNewSupplier";
 import InfoIcon from "@mui/icons-material/Info";
 import { Layout } from "../layout/Layout";
-import { AuthContext } from "../auth/authContext";
 
 export const SupplierPage = () => {
     const { searchString, handleFilterChange, compare } = useSearchFieldState();
     const [dialogOpened, setDialogOpened] = useState(false);
 
-    const { authData } = useContext(AuthContext);
-
-    const { data: suppliers } = useQuery<Supplier[]>(`/api/suppliers`, {
-        enabled: authData.signedIn,
-    });
+    const { data: suppliers } = useQuery<Supplier[]>(`/api/suppliers`);
 
     const filteredSuppliers = useMemo(
         () =>

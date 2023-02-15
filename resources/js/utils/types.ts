@@ -5,6 +5,20 @@ export interface User {
     signedIn: boolean;
 }
 
+export interface LogIn {
+    email: string;
+    password: string;
+}
+
+export interface Stats {
+    most_expensive_product: Product;
+    biggest_supplier: Supplier;
+    most_loaded_warehouse: Warehouse;
+    total_products: number;
+    total_suppliers: number;
+    total_warehouses: number;
+}
+
 export interface ProductFilter {
     name: string;
     priceFrom: string;

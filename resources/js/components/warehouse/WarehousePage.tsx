@@ -1,4 +1,4 @@
-import React, { useContext, useState } from "react";
+import React, { useState } from "react";
 import { useQuery } from "react-query";
 import { PageLayoutWrapper } from "../shared/PageLayoutWrapper";
 import styled from "styled-components";
@@ -7,7 +7,6 @@ import { atMinWidth } from "../../../styles/helpers";
 import { theme } from "../../../styles/muiThemes";
 import { WarehousesTable } from "./WarehousesTable";
 import { SearchField, useSearchFieldState } from "../shared/SearchField";
-import axios from "axios";
 import { Supplier, Warehouse, WarehouseFilter } from "../../utils/types";
 import { WarehouseFilters } from "./WarehouseFilters";
 import { Button } from "../shared/Button";
@@ -15,9 +14,8 @@ import { PlusIcon } from "../../../assets/icons/Plus.icon";
 import { colors } from "../../../styles/colors";
 import { AddNewWarehouse } from "./AddNewWarehouse";
 import InfoIcon from "@mui/icons-material/Info";
-import { Layout } from "../layout/Layout";
 import { Alert } from "@material-ui/lab";
-import { AuthContext } from "../auth/authContext";
+import { Layout } from "../layout/Layout";
 
 export const initialState = {
     query: "",
@@ -30,8 +28,6 @@ export const WarehousePage = () => {
     const [filters, setFilters] = useState<WarehouseFilter>(initialState);
     const [dialogOpened, setDialogOpened] = useState(false);
 
-    const { authData } = useContext(AuthContext);
-
     const { totalProductsFrom, totalProductsTo } = filters;
 
     const urlParams = new URLSearchParams({
@@ -42,13 +38,9 @@ export const WarehousePage = () => {
 
     const queryKey = `/api/warehouses?${urlParams}`;
 
-    const { data: warehouses } = useQuery<Warehouse[] | undefined>(queryKey, {
-        enabled: authData.signedIn,
-    });
+    const { data: warehouses } = useQuery<Warehouse[] | undefined>(queryKey);
 
-    const { data: suppliers } = useQuery<Supplier[]>(`/api/suppliers`, {
-        enabled: authData.signedIn,
-    });
+    const { data: suppliers } = useQuery<Supplier[]>(`/api/suppliers`);
 
     return (
         <Layout>

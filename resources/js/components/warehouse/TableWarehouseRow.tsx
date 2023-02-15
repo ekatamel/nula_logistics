@@ -10,7 +10,7 @@ import {
 import styled from "styled-components";
 import ArchiveIcon from "@material-ui/icons/Archive";
 import { useMutation, useQueryClient } from "react-query";
-import axios from "axios";
+import axios, { AxiosError } from "axios";
 import { Supplier, Warehouse } from "../../utils/types";
 import EditIcon from "@mui/icons-material/Edit";
 
@@ -37,16 +37,22 @@ export const TableWarehouseRow = ({
     } = warehouse;
     const { successNotification, errorNotification } = useQueryNotification();
 
-    const deleteProduct = (id: number) => {
-        return axios.delete(`/api/warehouses/${id}`);
+    const token = localStorage.getItem("auth_token");
+
+    const deleteWarehouse = (id: number) => {
+        return axios.delete(`/api/warehouses/${id}`, {
+            headers: {
+                Authorization: token,
+            },
+        });
     };
 
-    const handleDelete = useMutation(deleteProduct, {
+    const handleDelete = useMutation(deleteWarehouse, {
         onSuccess: async () => {
             await queryClient.refetchQueries(queryKey);
             successNotification("Warehouse was deleted!");
         },
-        onError: (error: any) => {
+        onError: (error: AxiosError) => {
             if (error.status != 422) {
                 errorNotification(
                     "Sorry, something went wrong. Please, try again later"

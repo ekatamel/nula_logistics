@@ -1,76 +1,19 @@
-import React, { useContext, useEffect } from "react";
+import React, { useContext } from "react";
 import { Paper, TextField, Typography } from "@material-ui/core";
 import { atMinWidth } from "../../../styles/helpers";
 import styled from "styled-components";
 import { Formik } from "formik";
 import { Button } from "../shared/Button";
-import { useCustomMutation, Mutation } from "../../utils/useCustomMutation";
-import { useQueryNotification } from "../../utils/utils";
-import { FormikSubmitHandler, Product } from "../../utils/types";
-import { AxiosError } from "axios";
-import { useNavigate } from "react-router";
-import { useAuth } from "../auth/useAuth";
-import { AuthContext } from "../auth/authContext";
+import { AuthContext } from "./AuthContext";
+import { LogIn } from "../../utils/types";
 
-const initValues = {
+const initValues: LogIn = {
     email: "",
     password: "",
 };
 
 export const Login = () => {
-    const { successNotification, errorNotification } = useQueryNotification();
-    const navigate = useNavigate();
-
-    const { setAsLogged } = useAuth();
-    const { authData } = useContext(AuthContext);
-    const isSignedIn = authData.signedIn;
-
-    const createNewSubjectMutation: Mutation<Product> = (initVals) => ({
-        path: "/api/login",
-        method: "POST",
-        params: initVals,
-    });
-
-    const newSubjectMutation = useCustomMutation(
-        createNewSubjectMutation,
-        {
-            onSuccess: async (data: Record<string, number | any>) => {
-                const response = await data.json();
-                try {
-                    setAsLogged(response);
-                    successNotification("You were successfully logged in!");
-                    navigate("/");
-                } catch (e) {
-                    errorNotification("Something went wrong");
-                }
-            },
-            onError: (error: AxiosError) => {
-                if (error.status == 401) {
-                    return errorNotification("Unauthorized");
-                }
-                return errorNotification(
-                    "Sorry, something went wrong. Please, try again later"
-                );
-            },
-        },
-        true
-    );
-
-    const formikSubmit: FormikSubmitHandler<any> = async (
-        values,
-        { setErrors }
-    ) => {
-        await newSubjectMutation.mutateAsync(values).catch((err) => {
-            setErrors(err.errors);
-        });
-    };
-
-    useEffect(() => {
-        if (isSignedIn) {
-            navigate("/");
-        }
-    }, [isSignedIn]);
-
+    const { loginUser } = useContext(AuthContext);
     return (
         <PageWrapper>
             <StyledTypography variant="overline">
@@ -78,7 +21,13 @@ export const Login = () => {
             </StyledTypography>
             <StyledPaper elevation={10}>
                 <Typography variant="h1">Log in</Typography>
-                <Formik initialValues={initValues} onSubmit={formikSubmit}>
+                <Formik
+                    initialValues={initValues}
+                    onSubmit={(values: LogIn) => {
+                        const { email, password } = values;
+                        loginUser(email, password);
+                    }}
+                >
                     {(formikProps) => {
                         const {
                             values,

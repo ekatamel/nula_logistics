@@ -1,16 +1,31 @@
-import React from "react";
-import { User } from "../../utils/types";
+import { createContext, useContext } from "react";
 
-interface Auth {
-    signedIn: boolean;
-    user: User | null;
+export interface User {
+    id: number;
+    name: string;
+    email: string;
 }
-const authData: Auth = {
-    signedIn: false,
-    user: null,
-};
 
-export const AuthContext = React.createContext({
-    authData: { ...authData },
-    setAuthData: (val) => {},
+export interface AuthContextType {
+    userData?: User;
+    loginUser: (email: string, password: string) => Promise<void>;
+    logoutUser: () => void;
+    registerNewUser: (
+        name: string,
+        email: string,
+        password: string
+    ) => Promise<void>;
+}
+
+export const AuthContext = createContext<AuthContextType>({
+    userData: undefined,
+    loginUser: async (email: string, password: string) => {},
+    registerNewUser: async (
+        name: string,
+        email: string,
+        password: string
+    ) => {},
+    logoutUser: () => {},
 });
+
+export const useAuth = () => useContext(AuthContext);

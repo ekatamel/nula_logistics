@@ -1,20 +1,13 @@
-import React, { useEffect } from "react";
+import React from "react";
 import styled from "styled-components";
 import { theme } from "../../../styles/muiThemes";
 import { Navigation } from "../navigation/Navigation";
-import { useAuth } from "../auth/useAuth";
 
 interface Props {
     children: JSX.Element[] | JSX.Element;
 }
 
 export const Layout = ({ children }: Props) => {
-    const { loginUserOnStartup } = useAuth();
-
-    useEffect(() => {
-        loginUserOnStartup();
-    }, []);
-
     return (
         <PageLayout>
             <MainContent>{children}</MainContent>

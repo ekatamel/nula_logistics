@@ -6,7 +6,7 @@ import { useQueryNotification } from "../../utils/utils";
 import styled from "styled-components";
 import ArchiveIcon from "@material-ui/icons/Archive";
 import { useMutation, useQueryClient } from "react-query";
-import axios from "axios";
+import axios, { AxiosError } from "axios";
 import { Supplier } from "../../utils/types";
 
 interface Props {
@@ -18,16 +18,22 @@ export const TableSupplierRow = ({ supplier }: Props) => {
     const { id, name, address, products } = supplier;
     const { successNotification, errorNotification } = useQueryNotification();
 
-    const deleteProduct = (id: number) => {
-        return axios.delete(`/api/suppliers/${id}`);
+    const token = localStorage.getItem("auth_token");
+
+    const deleteSupplier = (id: number) => {
+        return axios.delete(`/api/suppliers/${id}`, {
+            headers: {
+                Authorization: token,
+            },
+        });
     };
 
-    const handleDelete = useMutation(deleteProduct, {
+    const handleDelete = useMutation(deleteSupplier, {
         onSuccess: async () => {
             await queryClient.refetchQueries("/api/suppliers");
             successNotification("Supplier was deleted!");
         },
-        onError: (error: any) => {
+        onError: (error: AxiosError) => {
             if (error.status != 422) {
                 errorNotification(
                     "Sorry, something went wrong. Please, try again later"

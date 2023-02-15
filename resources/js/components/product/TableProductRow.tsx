@@ -11,7 +11,7 @@ import {
 import styled from "styled-components";
 import ArchiveIcon from "@material-ui/icons/Archive";
 import { useMutation, useQueryClient } from "react-query";
-import axios from "axios";
+import axios, { AxiosError } from "axios";
 import { Product, Supplier } from "../../utils/types";
 
 interface Props {
@@ -28,8 +28,14 @@ export const TableProductRow = ({ product, queryKey, suppliers }: Props) => {
     const parsedDate = dateFormatter(created_at);
     const suppliersSelect = suppliers && getSupplierSelectGroup(suppliers);
 
+    const token = localStorage.getItem("auth_token");
+
     const deleteProduct = (id: number) => {
-        return axios.delete(`/api/products/${id}`);
+        return axios.delete(`/api/products/${id}`, {
+            headers: {
+                Authorization: token,
+            },
+        });
     };
 
     const handleDelete = useMutation(deleteProduct, {
@@ -37,7 +43,7 @@ export const TableProductRow = ({ product, queryKey, suppliers }: Props) => {
             await queryClient.refetchQueries(queryKey);
             successNotification("Product was deleted!");
         },
-        onError: (error: any) => {
+        onError: (error: AxiosError) => {
             if (error.status != 422) {
                 errorNotification(
                     "Sorry, something went wrong. Please, try again later"

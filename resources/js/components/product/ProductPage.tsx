@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useState } from "react";
 import { useQuery } from "react-query";
 import { PageLayoutWrapper } from "../shared/PageLayoutWrapper";
 import styled from "styled-components";
@@ -7,7 +7,6 @@ import { atMinWidth } from "../../../styles/helpers";
 import { theme } from "../../../styles/muiThemes";
 import { ProductsTable } from "./ProductsTable";
 import { SearchField, useSearchFieldState } from "../shared/SearchField";
-import axios from "axios";
 import { ProductFilter, Product, Supplier } from "../../utils/types";
 import { ProductFilters } from "./ProductFilters";
 import { Button } from "../shared/Button";
@@ -17,7 +16,6 @@ import { AddNewProduct } from "./AddNewProduct";
 import InfoIcon from "@mui/icons-material/Info";
 import { Layout } from "../layout/Layout";
 import { Alert } from "@material-ui/lab";
-import { AuthContext } from "../auth/authContext";
 
 export const initialState = {
     name: "",
@@ -32,8 +30,6 @@ export const ProductPage = () => {
     const [filters, setFilters] = useState<ProductFilter>(initialState);
     const [dialogOpened, setDialogOpened] = useState(false);
 
-    const { authData } = useContext(AuthContext);
-
     const { priceFrom, priceTo, dateAddedFrom, dateAddedTo } = filters;
 
     const urlParams = new URLSearchParams({
@@ -45,13 +41,9 @@ export const ProductPage = () => {
     });
     const queryKey = `/api/products?${urlParams}`;
 
-    const { data: products } = useQuery<Product[]>(queryKey, {
-        enabled: authData.signedIn,
-    });
+    const { data: products } = useQuery<Product[]>(queryKey);
 
-    const { data: suppliers } = useQuery<Supplier[]>(`/api/suppliers`, {
-        enabled: authData.signedIn,
-    });
+    const { data: suppliers } = useQuery<Supplier[]>(`/api/suppliers`);
 
     return (
         <Layout>

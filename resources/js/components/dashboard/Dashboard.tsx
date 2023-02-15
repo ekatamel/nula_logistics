@@ -1,4 +1,4 @@
-import React, { useContext, useEffect } from "react";
+import React, { useContext } from "react";
 import { PageLayoutWrapper } from "../shared/PageLayoutWrapper";
 import styled, { css } from "styled-components";
 import {
@@ -15,8 +15,9 @@ import OtherHousesIcon from "@mui/icons-material/OtherHouses";
 import LocalShippingIcon from "@mui/icons-material/LocalShipping";
 import { useQuery } from "react-query";
 import InfoIcon from "@mui/icons-material/Info";
+import { AuthContext } from "../auth/AuthContext";
+import { Stats } from "../../utils/types";
 import { Layout } from "../layout/Layout";
-import { AuthContext } from "../auth/authContext";
 
 const useStyles = makeStyles(() => ({
     root: {
@@ -26,12 +27,9 @@ const useStyles = makeStyles(() => ({
 
 export const Dashboard = () => {
     const classes = useStyles();
+    const { userData } = useContext(AuthContext);
 
-    const { authData } = useContext(AuthContext);
-
-    const { data: statistics } = useQuery<any>(`/api/stats`, {
-        enabled: authData.signedIn,
-    });
+    const { data: statistics } = useQuery<Stats>(`/api/stats`);
 
     const mostExpensiveProduct = statistics?.most_expensive_product;
     const biggestSuppplier = statistics?.biggest_supplier;
@@ -43,9 +41,9 @@ export const Dashboard = () => {
     return (
         <Layout>
             <PageLayoutWrapper>
-                {authData.signedIn && authData.user && (
+                {userData && (
                     <StyledTypography variant="h1">
-                        {`Hello, ${authData.user.name}!`}
+                        {`Hello, ${userData.name}!`}
                     </StyledTypography>
                 )}
                 <Grid>
