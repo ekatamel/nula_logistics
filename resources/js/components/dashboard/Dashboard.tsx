@@ -15,8 +15,10 @@ import OtherHousesIcon from "@mui/icons-material/OtherHouses";
 import LocalShippingIcon from "@mui/icons-material/LocalShipping";
 import { useQuery } from "react-query";
 import InfoIcon from "@mui/icons-material/Info";
-import { Layout } from "../layout/Layout";
 import { AuthContext } from "../auth/authContext";
+import { useNavigate } from "react-router-dom";
+import { Layout } from "../layout/Layout";
+import { useAuth } from "../auth/useAuth";
 
 const useStyles = makeStyles(() => ({
     root: {
@@ -26,6 +28,7 @@ const useStyles = makeStyles(() => ({
 
 export const Dashboard = () => {
     const classes = useStyles();
+    const navigate = useNavigate();
 
     const { authData } = useContext(AuthContext);
 
@@ -40,106 +43,115 @@ export const Dashboard = () => {
     const totalSuppliers = statistics?.total_suppliers;
     const totalWarehouses = statistics?.total_warehouses;
 
+    // useEffect(() => {
+    //     if (!authData.signedIn) {
+    //         navigate("/login");
+    //     }
+    // }, []);
+
+    const { userData } = useAuth();
+
+    console.log("DashUSER", userData);
+    console.log("DASHAuth", authData);
+
     return (
-        <Layout>
-            <PageLayoutWrapper>
-                {authData.signedIn && authData.user && (
-                    <StyledTypography variant="h1">
-                        {`Hello, ${authData.user.name}!`}
-                    </StyledTypography>
-                )}
-                <Grid>
-                    <StyledPaper elevation={10}>
-                        <Typography variant="h2">Statistics</Typography>
-                        <Stats>
-                            {mostExpensiveProduct &&
-                                biggestSuppplier &&
-                                mostLoadedWarehouse && (
-                                    <StatsContainer>
-                                        <StatsGroup>
-                                            <PaidIcon
-                                                sx={{
-                                                    color: "#0077B6",
-                                                    width: "50px",
-                                                    height: "50px",
-                                                }}
-                                            />
-                                            <Paragraph $color={"#0077B6"}>
-                                                {mostExpensiveProduct?.name}{" "}
-                                                <Tooltip title="The most expensive product in the database">
-                                                    <IconButton
-                                                        className={classes.root}
-                                                    >
-                                                        <InfoIcon />
-                                                    </IconButton>
-                                                </Tooltip>
-                                            </Paragraph>
-                                        </StatsGroup>
-                                        <StatsGroup>
-                                            <LocalShippingIcon
-                                                sx={{
-                                                    color: "#48CAE4",
-                                                    width: "50px",
-                                                    height: "50px",
-                                                }}
-                                            />
-                                            <Paragraph $color={"#48CAE4"}>
-                                                {biggestSuppplier?.name}
-                                                <Tooltip title="Supplier with the largest product count">
-                                                    <IconButton
-                                                        className={classes.root}
-                                                    >
-                                                        <InfoIcon />
-                                                    </IconButton>
-                                                </Tooltip>
-                                            </Paragraph>
-                                        </StatsGroup>
-                                        <StatsGroup>
-                                            <OtherHousesIcon
-                                                sx={{
-                                                    color: "#03045E",
-                                                    width: "50px",
-                                                    height: "50px",
-                                                }}
-                                            />
-                                            <Paragraph $color={"#03045E"}>
-                                                {mostLoadedWarehouse?.address}
-                                                <Tooltip title="The most loaded warehouse">
-                                                    <IconButton
-                                                        className={classes.root}
-                                                    >
-                                                        <InfoIcon />
-                                                    </IconButton>
-                                                </Tooltip>
-                                            </Paragraph>
-                                        </StatsGroup>
-                                    </StatsContainer>
-                                )}
-                            <NumberContainer>
-                                <StyledParagraph $color={"#0077B6"}>
-                                    <OutlinedNumber $color={"#0077B6"}>
-                                        {totalProducts}
-                                    </OutlinedNumber>
-                                    total products
-                                </StyledParagraph>
-                                <StyledParagraph $color={"#48CAE4"}>
-                                    <OutlinedNumber $color={"#48CAE4"}>
-                                        {totalSuppliers}
-                                    </OutlinedNumber>
-                                    <span>total suppliers</span>
-                                </StyledParagraph>
-                                <StyledParagraph $color={"#03045E"}>
-                                    <OutlinedNumber $color={"#03045E"}>
-                                        {totalWarehouses}
-                                    </OutlinedNumber>
-                                    <span>total warehouses</span>
-                                </StyledParagraph>
-                            </NumberContainer>
-                        </Stats>
-                    </StyledPaper>
-                </Grid>
-            </PageLayoutWrapper>
-        </Layout>
+        <PageLayoutWrapper>
+            {authData.signedIn && authData.user && (
+                <StyledTypography variant="h1">
+                    {`Hello, ${authData.user.name}!`}
+                </StyledTypography>
+            )}
+            <Grid>
+                <StyledPaper elevation={10}>
+                    <Typography variant="h2">Statistics</Typography>
+                    <Stats>
+                        {mostExpensiveProduct &&
+                            biggestSuppplier &&
+                            mostLoadedWarehouse && (
+                                <StatsContainer>
+                                    <StatsGroup>
+                                        <PaidIcon
+                                            sx={{
+                                                color: "#0077B6",
+                                                width: "50px",
+                                                height: "50px",
+                                            }}
+                                        />
+                                        <Paragraph $color={"#0077B6"}>
+                                            {mostExpensiveProduct?.name}{" "}
+                                            <Tooltip title="The most expensive product in the database">
+                                                <IconButton
+                                                    className={classes.root}
+                                                >
+                                                    <InfoIcon />
+                                                </IconButton>
+                                            </Tooltip>
+                                        </Paragraph>
+                                    </StatsGroup>
+                                    <StatsGroup>
+                                        <LocalShippingIcon
+                                            sx={{
+                                                color: "#48CAE4",
+                                                width: "50px",
+                                                height: "50px",
+                                            }}
+                                        />
+                                        <Paragraph $color={"#48CAE4"}>
+                                            {biggestSuppplier?.name}
+                                            <Tooltip title="Supplier with the largest product count">
+                                                <IconButton
+                                                    className={classes.root}
+                                                >
+                                                    <InfoIcon />
+                                                </IconButton>
+                                            </Tooltip>
+                                        </Paragraph>
+                                    </StatsGroup>
+                                    <StatsGroup>
+                                        <OtherHousesIcon
+                                            sx={{
+                                                color: "#03045E",
+                                                width: "50px",
+                                                height: "50px",
+                                            }}
+                                        />
+                                        <Paragraph $color={"#03045E"}>
+                                            {mostLoadedWarehouse?.address}
+                                            <Tooltip title="The most loaded warehouse">
+                                                <IconButton
+                                                    className={classes.root}
+                                                >
+                                                    <InfoIcon />
+                                                </IconButton>
+                                            </Tooltip>
+                                        </Paragraph>
+                                    </StatsGroup>
+                                </StatsContainer>
+                            )}
+                        <NumberContainer>
+                            <StyledParagraph $color={"#0077B6"}>
+                                <OutlinedNumber $color={"#0077B6"}>
+                                    {totalProducts}
+                                </OutlinedNumber>
+                                total products
+                            </StyledParagraph>
+                            <StyledParagraph $color={"#48CAE4"}>
+                                <OutlinedNumber $color={"#48CAE4"}>
+                                    {totalSuppliers}
+                                </OutlinedNumber>
+                                <span>total suppliers</span>
+                            </StyledParagraph>
+                            <StyledParagraph $color={"#03045E"}>
+                                <OutlinedNumber $color={"#03045E"}>
+                                    {totalWarehouses}
+                                </OutlinedNumber>
+                                <span>total warehouses</span>
+                            </StyledParagraph>
+                        </NumberContainer>
+                    </Stats>
+                </StyledPaper>
+            </Grid>
+        </PageLayoutWrapper>
     );
 };
 

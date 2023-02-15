@@ -10,7 +10,7 @@ import {
 import styled from "styled-components";
 import ArchiveIcon from "@material-ui/icons/Archive";
 import { useMutation, useQueryClient } from "react-query";
-import axios from "axios";
+import axios, { AxiosError } from "axios";
 import { Supplier, Warehouse } from "../../utils/types";
 import EditIcon from "@mui/icons-material/Edit";
 
@@ -46,7 +46,7 @@ export const TableWarehouseRow = ({
             await queryClient.refetchQueries(queryKey);
             successNotification("Warehouse was deleted!");
         },
-        onError: (error: any) => {
+        onError: (error: AxiosError) => {
             if (error.status != 422) {
                 errorNotification(
                     "Sorry, something went wrong. Please, try again later"

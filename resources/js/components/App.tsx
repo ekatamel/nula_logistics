@@ -19,16 +19,20 @@ import { Login } from "./auth/Login";
 import { useAuth } from "../components/auth/useAuth";
 import { AuthContext } from "../components/auth/authContext";
 import { fetchHelper } from "../utils/apiHelpers";
+import { Layout } from "./layout/Layout";
 
 const App = () => {
     const { userData } = useAuth();
     const [authData, setAuthData] = useState({
         signedIn: userData.signedIn,
         user: userData.user,
+        token: userData.token,
     });
 
     const defaultQueryFn = async ({ queryKey }) => {
-        return await fetchHelper(queryKey[0]);
+        if (authData.token) {
+            return await fetchHelper(queryKey[0], authData.token);
+        }
     };
 
     const queryClient = new QueryClient({
@@ -40,7 +44,7 @@ const App = () => {
         },
     });
 
-    const routerAuth = createBrowserRouter(
+    const router = createBrowserRouter(
         createRoutesFromElements([
             <Route path="/" element={<Dashboard />} />,
             <Route path="/products" element={<ProductPage />} />,
@@ -57,7 +61,7 @@ const App = () => {
             <AuthContext.Provider value={{ authData, setAuthData }}>
                 <ThemeProvider theme={theme}>
                     <SnackProvider>
-                        {<RouterProvider router={routerAuth} />}
+                        <Layout>{<RouterProvider router={router} />}</Layout>
                     </SnackProvider>
                 </ThemeProvider>
             </AuthContext.Provider>

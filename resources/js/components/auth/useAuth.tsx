@@ -1,31 +1,39 @@
 import axios from "axios";
-import React, { useContext, useEffect } from "react";
-import { redirect } from "react-router-dom";
+import React, { useContext, useEffect, useState } from "react";
+import { redirect } from "react-router";
 import { AuthContext } from "./authContext";
 
+interface Auth {
+    signedIn: boolean;
+    // TODO
+    user: any;
+    token: string | null;
+}
+
 export const useAuth = () => {
-    const [userData, setUserdata] = React.useState({
+    const [userData, setUserdata] = useState<Auth>({
         signedIn: false,
         user: null,
+        token: null,
     });
 
     const { setAuthData } = useContext(AuthContext);
 
     useEffect(() => {
         setAuthData(userData);
-    }, [userData.signedIn]);
+    }, [userData]);
 
     function setAsLogged(data) {
         const { access_token, user } = data;
-
         localStorage.setItem("auth_token", `Bearer ${access_token}`);
-        setUserdata({ signedIn: true, user });
+        setUserdata({ signedIn: true, user, token: access_token });
+        return "/";
     }
 
-    const setLogout = async () => {
+    const setLogout = () => {
         localStorage.removeItem("auth_token");
-        setUserdata({ signedIn: false, user: null });
-        redirect("/login");
+        setUserdata({ signedIn: false, user: null, token: null });
+        return "/login";
     };
 
     const loginUserOnStartup = async () => {
@@ -38,15 +46,19 @@ export const useAuth = () => {
                         Authorization: token,
                     },
                 });
-                setUserdata({ signedIn: true, user: response.data.user });
-                redirect("/");
+                setUserdata({
+                    signedIn: true,
+                    user: response.data.user,
+                    token,
+                });
+                return "/";
             } catch (err) {
-                setUserdata({ signedIn: false, user: null });
+                setUserdata({ signedIn: false, user: null, token: null });
                 setLogout();
             }
         } else {
-            setUserdata({ signedIn: false, user: null });
-            redirect("/login");
+            setUserdata({ signedIn: false, user: null, token: null });
+            return "/login";
         }
     };
 

@@ -1,8 +1,9 @@
-import React, { useEffect } from "react";
+import React, { useContext, useEffect } from "react";
 import styled from "styled-components";
 import { theme } from "../../../styles/muiThemes";
 import { Navigation } from "../navigation/Navigation";
 import { useAuth } from "../auth/useAuth";
+import { AuthContext } from "../auth/authContext";
 
 interface Props {
     children: JSX.Element[] | JSX.Element;
@@ -11,8 +12,20 @@ interface Props {
 export const Layout = ({ children }: Props) => {
     const { loginUserOnStartup } = useAuth();
 
+    const { authData } = useContext(AuthContext);
+    const { userData } = useAuth();
+
     useEffect(() => {
-        loginUserOnStartup();
+        const loginIfAuthenticated = async () => {
+            const navigateToURL = await loginUserOnStartup();
+            // if (navigateToURL) {
+            //     window.location.href = navigateToURL;
+            // }
+        };
+        loginIfAuthenticated();
+        // console.log("authData", authData);
+        console.log("USERDATA", userData);
+        console.log("authData", authData);
     }, []);
 
     return (

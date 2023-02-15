@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import {
     AppBar,
     IconButton,
@@ -13,28 +13,46 @@ import MenuIcon from "@material-ui/icons/Menu";
 import { theme } from "../../../styles/muiThemes";
 import { Button } from "../shared/Button";
 import { NavGroup } from "./NavGroup";
-import { useNavigate } from "react-router";
+import { useNavigate, redirect } from "react-router-dom";
 import { useQueryNotification } from "../../utils/utils";
 import { useAuth } from "../auth/useAuth";
+import { AuthContext } from "../auth/authContext";
+import axios, { AxiosError } from "axios";
+import { useMutation, useQueryClient } from "react-query";
 
 export const Navigation = () => {
     const theme = useTheme();
     const [open, setOpen] = useState(false);
     const mobileVersion = useMediaQuery(theme.breakpoints.down("sm"));
-    const navigate = useNavigate();
     const { successNotification, errorNotification } = useQueryNotification();
 
+    const { authData } = useContext(AuthContext);
     const { setLogout } = useAuth();
 
     const handleLogout = async () => {
-        try {
-            await setLogout();
-            successNotification("You were successfully logged out !");
-            navigate("/login");
-        } catch (e) {
-            errorNotification("Something went wrong");
-        }
+        return await axios.post(`/api/logout`, {
+            headers: {
+                Authorization: authData.token,
+            },
+        });
     };
+
+    const logoutUser = useMutation(handleLogout, {
+        onSuccess: async () => {
+            successNotification("You were successfully logged out !");
+            setLogout();
+            // if (navigateToURL) {
+            //     window.location.href = navigateToURL;
+            // }
+        },
+        onError: (error: AxiosError) => {
+            if (error.status != 422) {
+                errorNotification(
+                    "Sorry, something went wrong. Please, try again later"
+                );
+            }
+        },
+    });
 
     const handleDrawerOpen = () => {
         setOpen(true);
@@ -75,7 +93,7 @@ export const Navigation = () => {
                         fullWidth
                         kind="primary"
                         size={"small"}
-                        onClick={handleLogout}
+                        onClick={() => logoutUser.mutate()}
                     >
                         Sign out
                     </LogoutButton>

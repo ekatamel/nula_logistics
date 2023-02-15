@@ -5,7 +5,6 @@ import styled from "styled-components";
 import { IconButton, Paper, Tooltip, Typography } from "@material-ui/core";
 import { atMinWidth } from "../../../styles/helpers";
 import { SearchField, useSearchFieldState } from "../shared/SearchField";
-import axios from "axios";
 import { Supplier } from "../../utils/types";
 import { Button } from "../shared/Button";
 import { PlusIcon } from "../../../assets/icons/Plus.icon";
@@ -13,8 +12,8 @@ import { colors } from "../../../styles/colors";
 import { SuppliersTable } from "./SuppliersTable";
 import { AddNewSupplier } from "./AddNewSupplier";
 import InfoIcon from "@mui/icons-material/Info";
-import { Layout } from "../layout/Layout";
 import { AuthContext } from "../auth/authContext";
+import { Layout } from "../layout/Layout";
 
 export const SupplierPage = () => {
     const { searchString, handleFilterChange, compare } = useSearchFieldState();

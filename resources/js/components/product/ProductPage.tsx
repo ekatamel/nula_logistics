@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useContext, useState } from "react";
 import { useQuery } from "react-query";
 import { PageLayoutWrapper } from "../shared/PageLayoutWrapper";
 import styled from "styled-components";
@@ -7,7 +7,6 @@ import { atMinWidth } from "../../../styles/helpers";
 import { theme } from "../../../styles/muiThemes";
 import { ProductsTable } from "./ProductsTable";
 import { SearchField, useSearchFieldState } from "../shared/SearchField";
-import axios from "axios";
 import { ProductFilter, Product, Supplier } from "../../utils/types";
 import { ProductFilters } from "./ProductFilters";
 import { Button } from "../shared/Button";

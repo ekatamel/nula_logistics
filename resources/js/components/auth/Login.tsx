@@ -8,7 +8,7 @@ import { useCustomMutation, Mutation } from "../../utils/useCustomMutation";
 import { useQueryNotification } from "../../utils/utils";
 import { FormikSubmitHandler, Product } from "../../utils/types";
 import { AxiosError } from "axios";
-import { useNavigate } from "react-router";
+import { useNavigate } from "react-router-dom";
 import { useAuth } from "../auth/useAuth";
 import { AuthContext } from "../auth/authContext";
 
@@ -23,7 +23,6 @@ export const Login = () => {
 
     const { setAsLogged } = useAuth();
     const { authData } = useContext(AuthContext);
-    const isSignedIn = authData.signedIn;
 
     const createNewSubjectMutation: Mutation<Product> = (initVals) => ({
         path: "/api/login",
@@ -35,11 +34,11 @@ export const Login = () => {
         createNewSubjectMutation,
         {
             onSuccess: async (data: Record<string, number | any>) => {
-                const response = await data.json();
                 try {
-                    setAsLogged(response);
+                    const response = await data.json();
+                    const navigateToURL = setAsLogged(response);
+                    navigateToURL && navigate(navigateToURL);
                     successNotification("You were successfully logged in!");
-                    navigate("/");
                 } catch (e) {
                     errorNotification("Something went wrong");
                 }
@@ -66,10 +65,10 @@ export const Login = () => {
     };
 
     useEffect(() => {
-        if (isSignedIn) {
+        if (authData.signedIn) {
             navigate("/");
         }
-    }, [isSignedIn]);
+    }, []);
 
     return (
         <PageWrapper>

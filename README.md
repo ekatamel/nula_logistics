@@ -146,7 +146,7 @@ npm run watch
 -   Add loader spinners while content is loaded, or page skeletons (loading state could be retreived from useQuery hook)
 -   Add pagination in case there is large number of entities (both on frontend and backend side)
 -   Set up Prettier, Linter in a project
--   Make authentification more sophisticated (strong password validation, redirect user to URL he/she tried to access before login)
+-   Make authentification more sophisticated (strong password validation, redirect user to URL he/she tried to access before login, token validation e.g. JWT, setting token expiration, handle auth via cookies etc.)
 -   Provide frontend validation (apart from backend validation and Formik errors)
 -   Define proper schems and references in swagger API documentation
 -   Make components more reusable

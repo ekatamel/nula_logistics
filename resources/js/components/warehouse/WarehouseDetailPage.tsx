@@ -1,6 +1,5 @@
 import React, { useContext, useState } from "react";
 import { useParams } from "react-router";
-import axios from "axios";
 import { useQuery } from "react-query";
 import { Supplier, Warehouse } from "../../utils/types";
 import { PageLayoutWrapper } from "../shared/PageLayoutWrapper";
