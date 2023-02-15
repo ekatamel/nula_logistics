@@ -3,8 +3,8 @@ services:
     db:
         image: mysql:8.0
         environment:
-            MYSQL_ROOT_PASSWORD: root
-            MYSQL_DATABASE: nula
+            MYSQL_ROOT_PASSWORD: ${DB_PASSWORD}
+            MYSQL_DATABASE: ${DB_USERNAME}
         ports:
             - "3306:3306"
     web:

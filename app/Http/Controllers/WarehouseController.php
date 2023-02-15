@@ -9,6 +9,70 @@ use App\Models\ProductWarehouse;
 
 class WarehouseController extends Controller
 {
+    /**
+     * @OA\Get(
+     *     path="/warehouses",
+     *     summary="Get all warehouses",
+     *     description="Returns warehouses.",
+     *     tags={"Warehouse"},
+     *     @OA\Response(
+     *         response=200,
+     *         description="Returns the warehouses and their products.",
+     *         @OA\JsonContent(
+     *             type="array",
+     *             @OA\Items(
+     *                 type="object",
+     *                 @OA\Property(property="id", type="integer", example="1"),
+     *                 @OA\Property(property="supplier", type="array",
+     *                     @OA\Items(
+     *                         type="object",
+     *                         @OA\Property(property="id", type="integer"),
+     *                         @OA\Property(property="name", type="string"),
+     *                         @OA\Property(property="address", type="string"),
+     *                         @OA\Property(property="created_at", type="string"),
+     *                         @OA\Property(property="updated_at", type="string"),
+     *                     )
+     *                 ),
+     *                 @OA\Property(property="address", type="string", example="123 Main St"),
+     *                 @OA\Property(property="product_count", type="integer", example="10"),
+     *                 @OA\Property(property="created_at", type="string", format="date-time", example="2023-02-14T17:45:00Z"),
+     *                 @OA\Property(property="updated_at", type="string", format="date-time", example="2023-02-14T18:15:00Z"),
+     *                 @OA\Property(
+     *                     property="products",
+     *                     type="array",
+     *                     @OA\Items(
+     *                         type="object",
+     *                         @OA\Property(property="id", type="integer", example="1"),
+     *                         @OA\Property(property="name", type="string", example="Product 1"),
+     *                         @OA\Property(property="price", type="number", format="float", example="10.99"),
+     *                         @OA\Property(property="quantity", type="integer", example="5"),
+     *                         @OA\Property(property="supplier", type="array",
+     *                             @OA\Items(
+     *                                 type="object",
+     *                                 @OA\Property(property="id", type="integer"),
+     *                                 @OA\Property(property="name", type="string"),
+     *                                 @OA\Property(property="address", type="string"),
+     *                                 @OA\Property(property="created_at", type="string"),
+     *                                 @OA\Property(property="updated_at", type="string"),
+     *                             )
+     *                         ),
+     *                         @OA\Property(property="created_at", type="string", format="date-time", example="2023-02-14T17:45:00Z"),
+     *                         @OA\Property(property="updated_at", type="string", format="date-time", example="2023-02-14T18:15:00Z"),
+     *                     )
+     *                 )
+     *             )
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=404,
+     *         description="Warehouse not found",
+     *         @OA\JsonContent(
+     *             type="object",
+     *             @OA\Property(property="message", type="string", example="Warehouse not found.")
+     *         )
+     *     )
+     * )
+     */
     public function index(Request $request)
     {
         $query = $request->input('query');
@@ -66,6 +130,107 @@ class WarehouseController extends Controller
     }
 
 
+    /**
+     * @OA\Get(
+     *     path="/warehouses/{id}",
+     *     summary="Get a specific warehouse",
+     *     description="Returns details of a specific warehouse including the products it holds.",
+     *     tags={"Warehouse"},
+     *     @OA\Parameter(
+     *         name="id",
+     *         in="path",
+     *         description="ID of the warehouse to retrieve",
+     *         required=true,
+     *         @OA\Schema(
+     *             type="integer",
+     *             format="int64",
+     *             example=1
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=200,
+     *         description="Returns the warehouse and its products.",
+     *         @OA\JsonContent(
+     *             type="object",
+     *             @OA\Property(property="id", type="integer", example="1"),
+     *             @OA\Property(property="supplier", type="array",                   @OA\Items(
+     *                 type="object",
+     *                 @OA\Property(
+     *                     property="id",
+     *                     type="integer"
+     *                 ),
+     *                 @OA\Property(
+     *                     property="name",
+     *                     type="string"
+     *                 ),
+     *                 @OA\Property(
+     *                     property="address",
+     *                     type="string"
+     *                 ),
+     *                 @OA\Property(
+     *                     property="created_at",
+     *                     type="string"
+     *                 ),
+     *                 @OA\Property(
+     *                     property="updated_at",
+     *                     type="string"
+     *                 ),
+     *                ),
+     *              ),
+     *             @OA\Property(property="address", type="string", example="123 Main St"),
+     *             @OA\Property(property="product_count", type="integer", example="10"),
+     *             @OA\Property(property="created_at", type="string", format="date-time", example="2023-02-14T17:45:00Z"),
+     *             @OA\Property(property="updated_at", type="string", format="date-time", example="2023-02-14T18:15:00Z"),
+     *             @OA\Property(
+     *                 property="products",
+     *                 type="array",
+     *                 @OA\Items(
+     *                     type="object",
+     *                     @OA\Property(property="id", type="integer", example="1"),
+     *                     @OA\Property(property="name", type="string", example="Product 1"),
+     *                     @OA\Property(property="price", type="number", format="float", example="10.99"),
+     *                     @OA\Property(property="quantity", type="integer", example="5"),
+     *             @OA\Property(property="supplier", type="array",                   
+     *              @OA\Items(
+     *                 type="object",
+     *                 @OA\Property(
+     *                     property="id",
+     *                     type="integer"
+     *                 ),
+     *                 @OA\Property(
+     *                     property="name",
+     *                     type="string"
+     *                 ),
+     *                 @OA\Property(
+     *                     property="address",
+     *                     type="string"
+     *                 ),
+     *                 @OA\Property(
+     *                     property="created_at",
+     *                     type="string"
+     *                 ),
+     *                 @OA\Property(
+     *                     property="updated_at",
+     *                     type="string"
+     *                 ),
+     *                ),
+     *              ),
+     *                     @OA\Property(property="created_at", type="string", format="date-time", example="2023-02-14T17:45:00Z"),
+     *                     @OA\Property(property="updated_at", type="string", format="date-time", example="2023-02-14T18:15:00Z"),
+     *                 )
+     *             )
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=404,
+     *         description="Warehouse not found",
+     *         @OA\JsonContent(
+     *             type="object",
+     *             @OA\Property(property="message", type="string", example="Warehouse not found.")
+     *         )
+     *     )
+     * )
+     */
     public function show($id)
     {
         $warehouse = Warehouse::with([
@@ -106,6 +271,65 @@ class WarehouseController extends Controller
         return response()->json($result);
     }
 
+    /**
+     * @OA\Post(
+     *     path="/warehouses",
+     *     tags={"Warehouse"},
+     *     summary="Create a new warehouse",
+     *     @OA\RequestBody(
+     *         required=true,
+     *          @OA\JsonContent(
+     *              type="object",
+     *              @OA\Property(
+     *                  property="supplier_id",
+     *                  type="integer",
+     *                  description="Supplier's id",
+     *                  example="1"
+     *              ),
+     *              @OA\Property(
+     *                  property="address",
+     *                  type="string",
+     *                  description="Supplier's address",
+     *                  example="123 Main St"
+     *              ),
+     *          )
+     *     ),
+     *     @OA\Response(
+     *         response=200,
+     *         description="Warehouse created successfully",
+     *               @OA\JsonContent(
+     *              type="object",
+     *              @OA\Property(
+     *                  property="id",
+     *                  type="integer",
+     *                  description="Warehouse ID"
+     *              ),
+     *              @OA\Property(
+     *                  property="supplier_id",
+     *                  type="integer",
+     *                  description="Supplier's id"
+     *              ),
+     *              @OA\Property(
+     *                  property="address",
+     *                  type="string",
+     *                  description="Supplier's address"
+     *              ),
+     *              @OA\Property(
+     *                     property="created_at",
+     *                     type="string"
+     *                 ),
+     *                 @OA\Property(
+     *                     property="updated_at",
+     *                     type="string"
+     *                 ),
+     *          )
+     *     ),
+     *     @OA\Response(
+     *         response=422,
+     *         description="Unprocessable Entity",
+     *     ),
+     * )
+     */
     public function store(Request $request)
     {
         $this->validate($request, [
@@ -122,8 +346,75 @@ class WarehouseController extends Controller
 
         session()->flash("success", 'The warehouse was successfully created!');
 
-        return $warehouse;
+        return response()->json($warehouse);
     }
+
+    /**
+     * @OA\Patch(
+     *   path="/warehouses/{id}",
+     *   summary="Update a Warehouse",
+     *   tags={"Warehouse"},
+     *   @OA\Parameter(
+     *     name="id",
+     *     in="path",
+     *     description="ID of the Warehouse",
+     *     required=true,
+     *     @OA\Schema(type="integer")
+     *   ),
+     *   @OA\RequestBody(
+     *     required=true,
+     *     @OA\JsonContent(
+     *       required={"supplier_id"},
+     *       @OA\Property(property="supplier_id", type="integer", description="ID of the Supplier"),
+     *       @OA\Property(property="address", type="string", description="Address of the Warehouse"),
+     *     ),
+     *   ),
+     *     @OA\Response(
+     *         response=200,
+     *         description="Warehouse updated successfully",
+     *               @OA\JsonContent(
+     *              type="object",
+     *              @OA\Property(
+     *                  property="id",
+     *                  type="integer",
+     *                  description="Warehouse ID"
+     *              ),
+     *              @OA\Property(
+     *                  property="supplier_id",
+     *                  type="integer",
+     *                  description="Supplier's id"
+     *              ),
+     *              @OA\Property(
+     *                  property="address",
+     *                  type="string",
+     *                  description="Supplier's address"
+     *              ),
+     *              @OA\Property(
+     *                     property="created_at",
+     *                     type="string"
+     *                 ),
+     *                 @OA\Property(
+     *                     property="updated_at",
+     *                     type="string"
+     *                 ),
+     *          )
+     *     ),
+     *     @OA\Response(
+     *         response=422,
+     *         description="Unprocessable Entity",
+     *     ),
+     *   @OA\Response(
+     *     response=404,
+     *     description="The requested Warehouse was not found"
+     *   ),
+     *   @OA\Response(
+     *     response=400,
+     *     description="Bad request"
+     *   ),
+     * )
+     */
+
+
 
     public function update(Request $request, $id)
     {
@@ -139,9 +430,42 @@ class WarehouseController extends Controller
         $warehouse->save();
 
         session()->flash("success", 'The warehouse was successfully updated!');
-        return $warehouse;
+        return response()->json($warehouse);
     }
 
+
+    /**
+     * @OA\Delete(
+     *     path="/warehouses/{id}",
+     *     tags={"Warehouses"},
+     *     summary="Delete a warehouse",
+     *     operationId="deleteWarehouse",
+     *     @OA\Parameter(
+     *         name="id",
+     *         in="path",
+     *         required=true,
+     *         description="Warehouse id",
+     *         @OA\Schema(
+     *             type="integer",
+     *         ),
+     *     ),
+     *     @OA\Response(
+     *         response=200,
+     *         description="Successful operation",
+     *         @OA\JsonContent(
+     *             @OA\Property(
+     *                 property="message",
+     *                 type="string",
+     *                 example="The warehouse was successfully deleted!"
+     *             )
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=404,
+     *         description="Resource not found",
+     *     ),
+     * )
+     */
     public function delete($id)
     {
         $warehouse = Warehouse::findOrFail($id);
@@ -149,6 +473,35 @@ class WarehouseController extends Controller
         session()->flash("success", 'The warehouse was successfully deleted!');
     }
 
+    /**
+     * @OA\Patch(
+     *   path="/warehouses/{warehouseId}/products",
+     *   summary="Assign a Product to a Warehouse",
+     *   tags={"Warehouse"},
+     *   @OA\Parameter(
+     *     name="warehouseId",
+     *     in="path",
+     *     description="ID of the Warehouse",
+     *     required=true,
+     *     @OA\Schema(type="integer")
+     *   ),
+     *   @OA\RequestBody(
+     *     required=true,
+     *     @OA\JsonContent(
+     *       @OA\Property(property="product_id", type="integer", description="ID of the Product"),
+     *       @OA\Property(property="quantity", type="integer", description="Quantity of the Product")
+     *     )
+     *   ),
+     *   @OA\Response(
+     *     response=201,
+     *     description="Product assigned to Warehouse successfully"
+     *   ),
+     *   @OA\Response(
+     *     response=400,
+     *     description="Bad request"
+     *   )
+     * )
+     */
     public function assignProductToWarehouse(Request $request, $warehouseId)
     {
         $validatedData = $request->validate([
@@ -172,8 +525,6 @@ class WarehouseController extends Controller
                 'quantity' => $validatedData['quantity'],
             ]);
         }
-
-
 
         $warehouse->updateProductCount();
 

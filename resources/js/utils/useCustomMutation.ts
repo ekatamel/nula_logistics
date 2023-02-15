@@ -2,6 +2,7 @@ import { useCallback } from "react";
 import { useMutation } from "react-query";
 import { UseMutationOptions } from "react-query/types/react/types";
 import { useQueryNotification } from "../utils/utils";
+import axios from "axios";
 
 type MutationFunction<TVariables, TData, TError, TContext> = (
     variables: TVariables
@@ -29,6 +30,10 @@ export function useCustomMutation<
 ): ReturnTypes<TVariables, TData, TError, TContext> {
     const { errorNotification } = useQueryNotification();
 
+    const csrfToken = document
+        .querySelector('meta[name="csrf-token"]')
+        ?.getAttribute("content");
+
     //@ts-ignore
     const mutationFn: MutationFunction<TVariables, TData, TError, TContext> =
         useCallback(
@@ -37,12 +42,15 @@ export function useCustomMutation<
                 const fetchOptions = {
                     method: method || "POST",
                     headers: new Headers({
+                        "X-CSRF-Token": csrfToken ? csrfToken : "",
                         Accept: "application/json",
                         "Content-Type": "application/json",
                         "X-Requested-With": "XMLHttpRequest",
                     }),
                     body: params ? JSON.stringify(params) : undefined,
+                    credentials: "include",
                 };
+                // @ts-ignore
                 const response = await fetch(path, fetchOptions);
                 if (response.ok) {
                     return response;
@@ -53,8 +61,6 @@ export function useCustomMutation<
                     return Promise.reject();
                 } else {
                     const parsedResponse = await response.json();
-
-                    // FIXME standardize error responses
                     if (returnErrorBody) {
                         return Promise.reject({
                             ...parsedResponse,

@@ -1,6 +1,6 @@
 import React from "react";
 import { TextFieldData } from "../../utils/types/TextFieldData";
-import { UpdatableItemsGroup } from "../shared/formFields/UpdatableItemsGroup";
+import { UpdatableItemsGroup } from "../shared/updatable/UpdatableItemsGroup";
 import { SelectFieldData } from "../../utils/types/SelectFieldData";
 import { Product, SelectItem, Warehouse } from "../../utils/types";
 import styled from "styled-components";

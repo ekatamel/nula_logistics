@@ -9,9 +9,10 @@ import {
 } from "../../utils/utils";
 import styled from "styled-components";
 import ArchiveIcon from "@material-ui/icons/Archive";
-import { useMutation, useQuery, useQueryClient } from "react-query";
+import { useMutation, useQueryClient } from "react-query";
 import axios from "axios";
 import { Supplier, Warehouse } from "../../utils/types";
+import EditIcon from "@mui/icons-material/Edit";
 
 interface Props {
     warehouse: Warehouse;
@@ -97,6 +98,9 @@ export const TableWarehouseRow = ({
             <TableCell>{totalProducts}</TableCell>
             <TableCell>
                 <ActionButtons>
+                    <IconButton href={`/warehouses/${id}`}>
+                        <EditIcon color="primary" />
+                    </IconButton>
                     <IconButton onClick={() => handleDelete.mutate(id)}>
                         <ArchiveIcon color="primary" />
                     </IconButton>

@@ -17,21 +17,117 @@ class SupplierController extends Controller
      *         description="Successful operation",
      *         @OA\JsonContent(
      *             type="array",
-     *             @OA\Items(ref="#/components/schemas/Supplier")
-     *         ),
+     *             @OA\Items(
+     *                 type="object",
+     *                 @OA\Property(
+     *                     property="id",
+     *                     type="integer"
+     *                 ),
+     *                 @OA\Property(
+     *                     property="name",
+     *                     type="string"
+     *                 ),
+     *                 @OA\Property(
+     *                     property="address",
+     *                     type="string"
+     *                 ),
+     *                 @OA\Property(
+     *                     property="created_at",
+     *                     type="string"
+     *                 ),
+     *                 @OA\Property(
+     *                     property="updated_at",
+     *                     type="string"
+     *                 ),
+     *                 @OA\Property(
+     *                     property="products",
+     *                     type="array",
+     *                     @OA\Items(
+     *                      type="object",
+     *                  @OA\Property(
+     *                     property="id",
+     *                     type="integer"
+     *                 ),
+     *                 @OA\Property(
+     *                     property="supplier_id",
+     *                     type="integer"
+     *                 ),
+     *                 @OA\Property(
+     *                     property="name",
+     *                     type="string"
+     *                 ),
+     *                 @OA\Property(
+     *                     property="price",
+     *                     type="number"
+     *                 ),
+     *                 @OA\Property(
+     *                     property="created_at",
+     *                     type="string"
+     *                 ),
+     *                 @OA\Property(
+     *                     property="updated_at",
+     *                     type="string"
+     *                 ),
+     *                 )
+     *                 ),
+     *      *             @OA\Property(
+     *                 property="warehouses",
+     *                 type="array",
+     *                 @OA\Items(
+     *                     type="object",
+     *                     @OA\Property(
+     *                         property="id",
+     *                         type="integer"
+     *                     ),
+     *                     @OA\Property(
+     *                         property="supplier_id",
+     *                         type="integer"
+     *                     ),
+     *                     @OA\Property(
+     *                         property="address",
+     *                         type="string"
+     *                     ),
+     *                     @OA\Property(
+     *                         property="product_count",
+     *                         type="number"
+     *                     ),
+     *                     @OA\Property(
+     *                         property="created_at",
+     *                         type="string"
+     *                     ),
+     *                     @OA\Property(
+     *                         property="updated_at",
+     *                         type="string"
+     *                     )
+     *                 )
+     *             )
+     *             )
+     *         )
      *     ),
+     *      @OA\Response(
+     *          response=400,
+     *          description="Bad Request"
+     *      ),
+     *      @OA\Response(
+     *          response=401,
+     *          description="Unauthorized",
+     *      ),
+     *      @OA\Response(
+     *          response=403,
+     *          description="Forbidden"
+     *      ),
      * )
      */
     public function index()
     {
         $suppliers = Supplier::with(['products', 'warehouses'])->get();
 
-        return $suppliers;
+        return response()->json($suppliers);
     }
 
     /**
      * @OA\Get(
-     *     path="/api/suppliers/{id}",
+     *     path="/suppliers/{id}",
      *     tags={"Suppliers"},
      *     summary="Get supplier information",
      *     description="Returns detailed information about a single supplier",
@@ -48,7 +144,91 @@ class SupplierController extends Controller
      *     @OA\Response(
      *         response=200,
      *         description="Successful operation",
-     *         @OA\JsonContent(ref="#/components/schemas/Supplier")
+     *         @OA\JsonContent(
+     *             type="object",
+     *             @OA\Property(
+     *                 property="id",
+     *                 type="integer"
+     *             ),
+     *             @OA\Property(
+     *                 property="name",
+     *                 type="string"
+     *             ),
+     *             @OA\Property(
+     *                 property="address",
+     *                 type="string"
+     *             ),
+     *             @OA\Property(
+     *                 property="created_at",
+     *                 type="string"
+     *             ),
+     *             @OA\Property(
+     *                 property="updated_at",
+     *                 type="string"
+     *             ),
+     *             @OA\Property(
+     *                 property="products",
+     *                 type="array",
+     *                 @OA\Items(
+     *                     type="object",
+     *                     @OA\Property(
+     *                         property="id",
+     *                         type="integer"
+     *                     ),
+     *                     @OA\Property(
+     *                         property="supplier_id",
+     *                         type="integer"
+     *                     ),
+     *                     @OA\Property(
+     *                         property="name",
+     *                         type="string"
+     *                     ),
+     *                     @OA\Property(
+     *                         property="price",
+     *                         type="number"
+     *                     ),
+     *                     @OA\Property(
+     *                         property="created_at",
+     *                         type="string"
+     *                     ),
+     *                     @OA\Property(
+     *                         property="updated_at",
+     *                         type="string"
+     *                     )
+     *                 )
+     *             ),
+     *             @OA\Property(
+     *                 property="warehouses",
+     *                 type="array",
+     *                 @OA\Items(
+     *                     type="object",
+     *                     @OA\Property(
+     *                         property="id",
+     *                         type="integer"
+     *                     ),
+     *                     @OA\Property(
+     *                         property="supplier_id",
+     *                         type="integer"
+     *                     ),
+     *                     @OA\Property(
+     *                         property="address",
+     *                         type="string"
+     *                     ),
+     *                     @OA\Property(
+     *                         property="product_count",
+     *                         type="number"
+     *                     ),
+     *                     @OA\Property(
+     *                         property="created_at",
+     *                         type="string"
+     *                     ),
+     *                     @OA\Property(
+     *                         property="updated_at",
+     *                         type="string"
+     *                     )
+     *                 )
+     *             )
+     *         )
      *     ),
      *     @OA\Response(
      *         response=404,
@@ -59,7 +239,7 @@ class SupplierController extends Controller
     public function show($id)
     {
         $supplier = Supplier::with(['products', 'warehouses'])->findOrFail($id);
-        return $supplier;
+        return response()->json($supplier);
     }
 
     /**
@@ -134,11 +314,11 @@ class SupplierController extends Controller
 
         session()->flash("success", 'The supplier was successfully created!');
 
-        return $supplier;
+        return response()->json($supplier);
     }
 
     /**
-     * @OA\Put(
+     * @OA\Patch(
      *     path="/suppliers/{id}",
      *     tags={"Suppliers"},
      *     summary="Update a supplier",
@@ -155,30 +335,22 @@ class SupplierController extends Controller
      *     @OA\RequestBody(
      *         description="Supplier data to update",
      *         required=true,
-     *         @OA\MediaType(
-     *             mediaType="application/x-www-form-urlencoded",
-     *             @OA\Schema(
-     *                 @OA\Property(
-     *                     property="name",
-     *                     type="string",
-     *                     description="Name of the supplier. Minimum length: 3",
-     *                     example="Supplier Name"
-     *                 ),
-     *                 @OA\Property(
-     *                     property="address",
-     *                     type="string",
-     *                     description="Address of the supplier. Minimum length: 3",
-     *                     example="123 Main St"
-     *                 ),
-     *             )
-     *         )
+     *          @OA\JsonContent(
+     *       @OA\Property(property="name", type="string"),
+     *       @OA\Property(property="address", type="string")
+     *     )
      *     ),
-     *     @OA\Response(
+     *      *     @OA\Response(
      *         response=200,
-     *         description="Supplier was successfully updated",
-     *         @OA\JsonContent(
-     *             ref="#/components/schemas/Supplier"
-     *         )
+     *         description="Successful operation",
+     *          @OA\JsonContent(
+     *          type="object",
+     *          @OA\Property(property="name", type="string"),
+     *          @OA\Property(property="address", type="string"),
+     *          @OA\Property(property="created_at", type="string", format="date-time"),
+     *          @OA\Property(property="updated_at", type="string", format="date-time"),
+     *          @OA\Property(property="id", type="integer")
+     *     )
      *     ),
      *     @OA\Response(
      *         response=404,
@@ -187,9 +359,6 @@ class SupplierController extends Controller
      *     @OA\Response(
      *         response=422,
      *         description="Validation error",
-     *         @OA\JsonContent(
-     *             ref="#/components/schemas/ValidationError"
-     *         )
      *     )
      * )
      */
@@ -200,7 +369,7 @@ class SupplierController extends Controller
             "address" => "min:3",
         ]);
 
-        $supplier = Supplier::with(['products', 'warehouses'])->findOrFail($id);
+        $supplier = Supplier::findOrFail($id);
 
         $supplier->name = $request->input('name') ?? $supplier->name;
         $supplier->address = $request->input('address') ?? $supplier->address;
@@ -209,7 +378,7 @@ class SupplierController extends Controller
 
         session()->flash("success", 'The supplier was successfully updated!');
 
-        return $supplier;
+        return response()->json($supplier);
     }
 
     /**

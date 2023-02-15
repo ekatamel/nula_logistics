@@ -7,7 +7,7 @@ import { ContentPaper } from "../shared/ContentPaper";
 import { Button } from "../shared/Button";
 import { useCustomMutation, Mutation } from "../../utils/useCustomMutation";
 import { useQueryNotification } from "../../utils/utils";
-import { FormikSubmitHandler, Product, Supplier } from "../../utils/types";
+import { FormikSubmitHandler, Product } from "../../utils/types";
 import { AxiosError } from "axios";
 
 interface Props {

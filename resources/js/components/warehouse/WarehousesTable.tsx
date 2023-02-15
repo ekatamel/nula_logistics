@@ -18,6 +18,7 @@ interface Props {
 
 export const WarehousesTable = ({ warehouses, queryKey, suppliers }: Props) => {
     const areNoWarehouses = !warehouses || warehouses?.length === 0;
+
     return (
         <TableContainer>
             <Table>
@@ -28,6 +29,7 @@ export const WarehousesTable = ({ warehouses, queryKey, suppliers }: Props) => {
                         <TableCell>Supplier</TableCell>
                         <TableCell>Products</TableCell>
                         <TableCell>Products quantity</TableCell>
+                        <TableCell>Actions</TableCell>
                     </TableRow>
                 </TableHead>
                 <TableBody>

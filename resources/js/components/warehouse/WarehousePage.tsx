@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { useQuery } from "react-query";
 import { PageLayoutWrapper } from "../shared/PageLayoutWrapper";
 import styled from "styled-components";
-import { Paper, Typography } from "@material-ui/core";
+import { IconButton, Paper, Tooltip, Typography } from "@material-ui/core";
 import { atMinWidth } from "../../../styles/helpers";
 import { theme } from "../../../styles/muiThemes";
 import { WarehousesTable } from "./WarehousesTable";
@@ -14,6 +14,9 @@ import { Button } from "../shared/Button";
 import { PlusIcon } from "../../../assets/icons/Plus.icon";
 import { colors } from "../../../styles/colors";
 import { AddNewWarehouse } from "./AddNewWarehouse";
+import InfoIcon from "@mui/icons-material/Info";
+import { Layout } from "../layout/Layout";
+import { Alert } from "@material-ui/lab";
 
 export const initialState = {
     query: "",
@@ -55,56 +58,74 @@ export const WarehousePage = () => {
     );
 
     return (
-        <PageLayoutWrapper>
-            <StyledPaper elevation={0}>
-                <Typography variant="h1">Warehouses</Typography>
+        <Layout>
+            <PageLayoutWrapper>
+                <StyledPaper elevation={0}>
+                    <Typography variant="h1">Warehouses</Typography>
+                    {suppliers?.length === 0 && (
+                        <StyledAlert severity="warning">
+                            You have to create a supplier first to be able to
+                            created a product
+                        </StyledAlert>
+                    )}
 
-                <StyledMainContent>
-                    <SearchBlock>
-                        <SearchField
-                            fullWidth
-                            name="searchString"
-                            onChange={handleFilterChange}
-                            placeholder="Search warehouse by address or supplier name"
-                        />
-                        <Button
-                            kind={"primary"}
-                            onClick={() => setDialogOpened(true)}
-                        >
-                            <PlusIcon color={colors.white} />{" "}
-                            <ButtonText>Add new warehouse</ButtonText>
-                        </Button>
-                    </SearchBlock>
+                    <StyledMainContent>
+                        <SearchBlock>
+                            <SearchField
+                                fullWidth
+                                name="searchString"
+                                onChange={handleFilterChange}
+                                placeholder="Search warehouse by address or supplier name"
+                            />
+                            <Button
+                                kind={"primary"}
+                                onClick={() => setDialogOpened(true)}
+                                disabled={suppliers?.length === 0}
+                            >
+                                <PlusIcon color={colors.white} />{" "}
+                                <ButtonText>Add new warehouse</ButtonText>
+                            </Button>
+                        </SearchBlock>
 
-                    <WarehouseListContainer>
-                        <WarehouseFilters
-                            filters={filters}
-                            setFilters={setFilters}
+                        <WarehouseListContainer>
+                            <WarehouseFilters
+                                filters={filters}
+                                setFilters={setFilters}
+                            />
+                            <div>
+                                <Typography variant={"overline"}>
+                                    Warehouses
+                                </Typography>
+                                <Tooltip title="Address, supplier fields in this table are updatable. Click in the cell to change the value or click the warehouse ID to see the detail">
+                                    <IconButton>
+                                        <InfoIcon />
+                                    </IconButton>
+                                </Tooltip>
+                                {warehouses && (
+                                    <WarehousesTable
+                                        warehouses={warehouses}
+                                        suppliers={suppliers}
+                                        queryKey={queryKey}
+                                    />
+                                )}
+                            </div>
+                        </WarehouseListContainer>
+                        <AddNewWarehouse
+                            dialogOpened={dialogOpened}
+                            setDialogOpened={setDialogOpened}
+                            queryKey={queryKey}
+                            suppliers={suppliers}
                         />
-                        <div>
-                            <Typography variant={"overline"}>
-                                Products
-                            </Typography>
-                            {warehouses && (
-                                <WarehousesTable
-                                    warehouses={warehouses}
-                                    suppliers={suppliers}
-                                    queryKey={queryKey}
-                                />
-                            )}
-                        </div>
-                    </WarehouseListContainer>
-                    <AddNewWarehouse
-                        dialogOpened={dialogOpened}
-                        setDialogOpened={setDialogOpened}
-                        queryKey={queryKey}
-                        suppliers={suppliers}
-                    />
-                </StyledMainContent>
-            </StyledPaper>
-        </PageLayoutWrapper>
+                    </StyledMainContent>
+                </StyledPaper>
+            </PageLayoutWrapper>
+        </Layout>
     );
 };
+
+const StyledAlert = styled(Alert)`
+    margin-top: 1rem;
+`;
 
 const StyledMainContent = styled.div`
     margin-top: 2rem;

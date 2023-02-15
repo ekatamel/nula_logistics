@@ -1,4 +1,6 @@
-import React from "react";
+import axios from "axios";
+import React, { useEffect } from "react";
+import { useQuery } from "react-query";
 import styled from "styled-components";
 import { theme } from "../../../styles/muiThemes";
 import { Navigation } from "../navigation/Navigation";
@@ -8,6 +10,12 @@ interface Props {
 }
 
 export const Layout = ({ children }: Props) => {
+    const fetchSuppliers = async () => {
+        const response = await axios(`/api/user`);
+        return response.data;
+    };
+    // const { data: user } = useQuery<any>(`/api/suppliers`, fetchSuppliers);
+
     return (
         <PageLayout>
             <MainContent>{children}</MainContent>

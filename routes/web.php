@@ -15,14 +15,6 @@ use App\Http\Controllers\ReactAppController;
 |
 */
 
-// TODO handle authentication
-Route::post('/register', [UserController::class, 'register']);
-Route::post('/login', [UserController::class, 'login']);
-Route::post('/logout', [UserController::class, 'logout']);
-Route::get('/csrf-token', function () {
-    return csrf_token();
-});
-
 
 Route::get('/{path?}', [
     ReactAppController::class, 'renderApp'

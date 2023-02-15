@@ -5,8 +5,6 @@ import { AlertClassKey } from "@material-ui/lab";
 import { CSSProperties } from "react";
 import { size } from "./helpers";
 
-// TODO remove unused MUI properties
-
 const themes = createTheme({
     palette: {
         primary: {
@@ -57,21 +55,19 @@ export const createMuiAppThemeOverrides: OverridesFunc = (theme) => ({
             fontSize: 48,
             color: colors.brandBlue,
         },
+        h2: {
+            fontFamily: "Tahoma",
+            fontWeight: "bold",
+            fontSize: 40,
+            textTransform: "uppercase",
+            color: colors.brandBlue,
+        },
         h3: {
             fontSize: 31,
             marginBottom: 24,
             fontWeight: "bold",
             fontFamily: "Tahoma",
             color: colors.brandBlue,
-        },
-
-        subtitle1: {
-            fontFamily: "Tahoma",
-            fontWeight: "bold",
-            fontStyle: "normal",
-            fontSize: "30px",
-            lineHeight: "26px",
-            color: "#023E8A",
         },
     },
 
@@ -114,11 +110,11 @@ export const createMuiAppThemeOverrides: OverridesFunc = (theme) => ({
             color: `${colors.white} !important`,
             fontSize: "13px",
             boxShadow: "none",
-            backgroundColor: `${colors.brandBlue} !important`,
+            backgroundColor: `${colors.brandBlue} `,
 
             "&:hover": {
                 color: `${colors.white} !important`,
-                backgroundColor: `${colors.brandLightBlue} !important`,
+                backgroundColor: `${colors.brandLightBlue}`,
                 boxShadow: "none",
                 transition: ".3s",
             },
@@ -168,7 +164,6 @@ export const createMuiAppThemeOverrides: OverridesFunc = (theme) => ({
         },
 
         input: {
-            //important to overwrite border styles fgrm.scss
             border: "none !important",
             padding: "0 8px !important",
         },
@@ -191,7 +186,6 @@ export const createMuiAppThemeOverrides: OverridesFunc = (theme) => ({
             fontSize: "12px",
             letterSpacing: "0.05em",
             marginBottom: "8px",
-            // to overwrite margin top from form label rule set in products.scss
             marginTop: 0,
         },
     },
@@ -207,53 +201,6 @@ export const createMuiAppThemeOverrides: OverridesFunc = (theme) => ({
             marginLeft: 0,
             marginRight: 0,
             marginBottom: 0,
-        },
-    },
-
-    MuiAutocomplete: {
-        endAdornment: {
-            top: "calc(50% - 24px)",
-        },
-    },
-
-    MuiSwitch: {
-        root: {
-            padding: "0",
-            height: "24px",
-            width: "40px",
-            borderRadius: "12px",
-        },
-
-        switchBase: {
-            padding: 0,
-            top: "50%",
-            left: 4,
-            transform: "translateY(-50%)",
-
-            "&$checked": {
-                transform: "translateY(-50%) translateX(16px)",
-            },
-        },
-
-        track: {
-            backgroundColor: colors.grey1,
-            opacity: 1,
-        },
-
-        thumb: {
-            height: "16px",
-            width: "16px",
-            backgroundColor: colors.white,
-        },
-
-        colorPrimary: {
-            "&$checked": {
-                "& + $track": {
-                    opacity: 1,
-                    backgroundColor: colors.success,
-                    // borderColor: colors.white,
-                },
-            },
         },
     },
 
@@ -310,7 +257,6 @@ export const createMuiAppThemeOverrides: OverridesFunc = (theme) => ({
     MuiTooltip: {
         tooltip: {
             backgroundColor: colors.brand,
-            padding: "16px",
             lineHeight: "22px",
             fontSize: "14px",
         },

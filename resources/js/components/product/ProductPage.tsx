@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { useQuery } from "react-query";
 import { PageLayoutWrapper } from "../shared/PageLayoutWrapper";
 import styled from "styled-components";
-import { Paper, Typography } from "@material-ui/core";
+import { IconButton, Paper, Tooltip, Typography } from "@material-ui/core";
 import { atMinWidth } from "../../../styles/helpers";
 import { theme } from "../../../styles/muiThemes";
 import { ProductsTable } from "./ProductsTable";
@@ -14,6 +14,9 @@ import { Button } from "../shared/Button";
 import { PlusIcon } from "../../../assets/icons/Plus.icon";
 import { colors } from "../../../styles/colors";
 import { AddNewProduct } from "./AddNewProduct";
+import InfoIcon from "@mui/icons-material/Info";
+import { Layout } from "../layout/Layout";
+import { Alert } from "@material-ui/lab";
 
 export const initialState = {
     name: "",
@@ -56,57 +59,75 @@ export const ProductPage = () => {
     );
 
     return (
-        <PageLayoutWrapper>
-            <StyledPaper elevation={0}>
-                <Typography variant="h1">Products</Typography>
+        <Layout>
+            <PageLayoutWrapper>
+                <StyledPaper elevation={0}>
+                    <Typography variant="h1">Products</Typography>
+                    {suppliers?.length === 0 && (
+                        <StyledAlert severity="warning">
+                            You have to create a supplier first to be able to
+                            created a product
+                        </StyledAlert>
+                    )}
 
-                <StyledMainContent>
-                    <SearchBlock>
-                        <SearchField
-                            fullWidth
-                            name="searchString"
-                            type={"text"}
-                            onChange={handleFilterChange}
-                            placeholder="Search product by name"
-                        />
-                        <Button
-                            kind={"primary"}
-                            onClick={() => setDialogOpened(true)}
-                        >
-                            <PlusIcon color={colors.white} />{" "}
-                            <ButtonText>Add new product</ButtonText>
-                        </Button>
-                    </SearchBlock>
+                    <StyledMainContent>
+                        <SearchBlock>
+                            <SearchField
+                                fullWidth
+                                name="searchString"
+                                type={"text"}
+                                onChange={handleFilterChange}
+                                placeholder="Search product by name"
+                            />
+                            <Button
+                                kind={"primary"}
+                                onClick={() => setDialogOpened(true)}
+                                disabled={suppliers?.length === 0}
+                            >
+                                <PlusIcon color={colors.white} />{" "}
+                                <ButtonText>Add new product</ButtonText>
+                            </Button>
+                        </SearchBlock>
 
-                    <ProductListContainer>
-                        <ProductFilters
-                            filters={filters}
-                            setFilters={setFilters}
+                        <ProductListContainer>
+                            <ProductFilters
+                                filters={filters}
+                                setFilters={setFilters}
+                            />
+                            <div>
+                                <Typography variant={"overline"}>
+                                    Products
+                                </Typography>
+                                <Tooltip title="Product name, price and supplier fields in this table are updatable. Click in the cell to change the value">
+                                    <IconButton>
+                                        <InfoIcon />
+                                    </IconButton>
+                                </Tooltip>
+                                {products && (
+                                    <ProductsTable
+                                        products={products}
+                                        queryKey={queryKey}
+                                        suppliers={suppliers}
+                                    />
+                                )}
+                            </div>
+                        </ProductListContainer>
+                        <AddNewProduct
+                            dialogOpened={dialogOpened}
+                            setDialogOpened={setDialogOpened}
+                            queryKey={queryKey}
+                            suppliers={suppliers}
                         />
-                        <div>
-                            <Typography variant={"overline"}>
-                                Products
-                            </Typography>
-                            {products && (
-                                <ProductsTable
-                                    products={products}
-                                    queryKey={queryKey}
-                                    suppliers={suppliers}
-                                />
-                            )}
-                        </div>
-                    </ProductListContainer>
-                    <AddNewProduct
-                        dialogOpened={dialogOpened}
-                        setDialogOpened={setDialogOpened}
-                        queryKey={queryKey}
-                        suppliers={suppliers}
-                    />
-                </StyledMainContent>
-            </StyledPaper>
-        </PageLayoutWrapper>
+                    </StyledMainContent>
+                </StyledPaper>
+            </PageLayoutWrapper>
+        </Layout>
     );
 };
+
+const StyledAlert = styled(Alert)`
+    margin-top: 1rem;
+`;
 
 const StyledMainContent = styled.div`
     margin-top: 2rem;

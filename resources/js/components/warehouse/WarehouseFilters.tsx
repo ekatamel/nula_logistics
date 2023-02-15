@@ -12,14 +12,7 @@ type Props = {
 };
 
 export const WarehouseFilters: FC<Props> = ({ filters, setFilters }) => {
-    // TODO REPLACE BY BETTER SOLUTION
     const clearFilters = () => {
-        const inputs = document.querySelectorAll(
-            "input"
-        ) as NodeListOf<HTMLInputElement>;
-        inputs.forEach((input) => {
-            input.value = "";
-        });
         setFilters(initialState);
     };
 

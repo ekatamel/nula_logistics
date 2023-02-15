@@ -13,12 +13,38 @@ import MenuIcon from "@material-ui/icons/Menu";
 import { theme } from "../../../styles/muiThemes";
 import { Button } from "../shared/Button";
 import { NavGroup } from "./NavGroup";
+import { Mutation, useCustomMutation } from "../../utils/useCustomMutation";
+import { useNavigate } from "react-router";
+import { useQueryNotification } from "../../utils/utils";
+import axios, { AxiosError } from "axios";
+import { FormikSubmitHandler } from "../../utils/types";
+import { useMutation } from "react-query";
 
 // TODO add logout button
 export const Navigation = () => {
     const theme = useTheme();
     const [open, setOpen] = useState(false);
     const mobileVersion = useMediaQuery(theme.breakpoints.down("sm"));
+    const navigate = useNavigate();
+    const { successNotification, errorNotification } = useQueryNotification();
+
+    const logout = () => {
+        return axios.post(`/api/logout`);
+    };
+
+    const handleLogout = useMutation(logout, {
+        onSuccess: async () => {
+            successNotification("You were successfully logged out !");
+            navigate("/login");
+        },
+        onError: (error: any) => {
+            if (error.status != 422) {
+                errorNotification(
+                    "Sorry, something went wrong. Please, try again later"
+                );
+            }
+        },
+    });
 
     const handleDrawerOpen = () => {
         setOpen(true);
@@ -55,6 +81,14 @@ export const Navigation = () => {
             >
                 <DrawerContent>
                     <NavGroup />
+                    <LogoutButton
+                        fullWidth
+                        kind="primary"
+                        size={"small"}
+                        onClick={() => handleLogout.mutate()}
+                    >
+                        Sign out
+                    </LogoutButton>
                 </DrawerContent>
             </StyledDrawer>
         </nav>
@@ -93,6 +127,9 @@ const DrawerContent = styled.div`
 
 const LogoutButton = styled(Button)`
     color: white;
+    width: fit-content;
+    margin-left: auto;
+    margin-right: auto;
 
     &:hover {
         color: white;

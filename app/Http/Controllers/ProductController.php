@@ -64,14 +64,60 @@ class ProductController extends Controller
      *              format="date"
      *          )
      *      ),
-     *      @OA\Response(
-     *          response=200,
-     *          description="successful operation",
-     *          @OA\JsonContent(
-     *              type="array",
-     *              @OA\Items(ref="#/components/schemas/Product")
-     *          )
-     *      ),
+     *     @OA\Response(
+     *         response=200,
+     *         description="Successful operation",
+     *         @OA\JsonContent(
+     *             type="array",
+     *             @OA\Items(
+     *                 type="object",
+     *                 @OA\Property(
+     *                     property="id",
+     *                     type="integer"
+     *                 ),
+     *                 @OA\Property(
+     *                     property="supplier_id",
+     *                     type="integer"
+     *                 ),
+     *                 @OA\Property(
+     *                     property="name",
+     *                     type="string"
+     *                 ),
+     *                 @OA\Property(
+     *                     property="price",
+     *                     type="number"
+     *                 ),
+     *                 @OA\Property(
+     *                     property="created_at",
+     *                     type="string"
+     *                 ),
+     *                 @OA\Property(
+     *                     property="updated_at",
+     *                     type="string"
+     *                 ),
+     *                 @OA\Property(
+     *                     property="supplier",
+     *                     type="object",
+     *                     @OA\Property(
+     *                         property="id",
+     *                         type="integer"
+     *                     ),
+     *                     @OA\Property(
+     *                         property="name",
+     *                         type="string"
+     *                     ),
+     *                     @OA\Property(
+     *                         property="created_at",
+     *                         type="string"
+     *                     ),
+     *                     @OA\Property(
+     *                         property="updated_at",
+     *                         type="string"
+     *                     )
+     *                 ),
+     *             )
+     *         )
+     *     ),
      *      @OA\Response(
      *          response=400,
      *          description="Bad Request"
@@ -84,11 +130,6 @@ class ProductController extends Controller
      *          response=403,
      *          description="Forbidden"
      *      ),
-     *      security={
-     *         {
-     *             "oauth2_security_example": {"write:products", "read:products"}
-     *         }
-     *     },
      * )
      */
     public function index(Request $request)
@@ -117,7 +158,7 @@ class ProductController extends Controller
         }
 
 
-        $products = $query->with(['supplier', 'warehouses'])->get();
+        $products = $query->with(['supplier'])->get();
 
         return response()->json($products);
     }
@@ -143,6 +184,10 @@ class ProductController extends Controller
      *             type="object",
      *             @OA\Property(
      *                 property="id",
+     *                 type="integer"
+     *             ),
+     *             @OA\Property(
+     *                 property="supplier_id",
      *                 type="integer"
      *             ),
      *             @OA\Property(
@@ -181,29 +226,6 @@ class ProductController extends Controller
      *                     type="string"
      *                 )
      *             ),
-     *             @OA\Property(
-     *                 property="warehouses",
-     *                 type="array",
-     *                 @OA\Items(
-     *                     type="object",
-     *                     @OA\Property(
-     *                         property="id",
-     *                         type="integer"
-     *                     ),
-     *                     @OA\Property(
-     *                         property="address",
-     *                         type="string"
-     *                     ),
-     *                     @OA\Property(
-     *                         property="created_at",
-     *                         type="string"
-     *                     ),
-     *                     @OA\Property(
-     *                         property="updated_at",
-     *                         type="string"
-     *                     )
-     *                 )
-     *             )
      *         )
      *     ),
      *     @OA\Response(
@@ -214,9 +236,8 @@ class ProductController extends Controller
      */
     public function show($id)
     {
-        $product = Product::with('supplier', 'warehouses')->findOrFail($id);
-
-        return $product;
+        $product = Product::with('supplier')->findOrFail($id);
+        return response()->json($product);
     }
 
     /**
@@ -283,11 +304,11 @@ class ProductController extends Controller
 
         session()->flash("success", 'The product was successfully created!');
 
-        return $product;
+        return response()->json($product);
     }
 
     /**
-     * @OA\Put(
+     * @OA\Patch(
      *     path="/products/{id}",
      *     tags={"Products"},
      *     summary="Update a product",
@@ -304,22 +325,25 @@ class ProductController extends Controller
      *     @OA\RequestBody(
      *         description="Input data format",
      *         required=true,
-     *         @OA\MediaType(
-     *             mediaType="application/json",
-     *             @OA\Schema(
-     *                 ref="#/components/schemas/UpdateProduct",
-     *             ),
-     *         ),
+     *          @OA\JsonContent(
+     *       required={"supplier_id", "name", "price"},
+     *       @OA\Property(property="supplier_id", type="integer"),
+     *       @OA\Property(property="name", type="string"),
+     *       @OA\Property(property="price", type="number")
+     *     )
      *     ),
      *     @OA\Response(
      *         response=200,
      *         description="Successful operation",
-     *         @OA\MediaType(
-     *             mediaType="application/json",
-     *             @OA\Schema(
-     *                 ref="#/components/schemas/Product",
-     *             ),
-     *         ),
+     *          @OA\JsonContent(
+     *          type="object",
+     *          @OA\Property(property="supplier_id", type="integer"),
+     *          @OA\Property(property="name", type="string"),
+     *          @OA\Property(property="price", type="number"),
+     *          @OA\Property(property="created_at", type="string", format="date-time"),
+     *          @OA\Property(property="updated_at", type="string", format="date-time"),
+     *          @OA\Property(property="id", type="integer")
+     *     )
      *     ),
      *     @OA\Response(
      *         response=400,
@@ -336,7 +360,7 @@ class ProductController extends Controller
         $this->validate($request, [
             "price" => "numeric",
         ]);
-        $product = Product::with('supplier')->findOrFail($id);
+        $product = Product::findOrFail($id);
 
         $product->supplier_id = $request->input('supplier_id') ?? $product->supplier_id;
         $product->name = $request->input('name') ?? $product->name;
@@ -345,7 +369,7 @@ class ProductController extends Controller
         $product->save();
 
         session()->flash("success", 'The product was successfully updated!');
-        return $product;
+        return response()->json($product);
     }
 
     /**

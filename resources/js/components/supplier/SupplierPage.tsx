@@ -2,7 +2,7 @@ import React, { useMemo, useState } from "react";
 import { useQuery } from "react-query";
 import { PageLayoutWrapper } from "../shared/PageLayoutWrapper";
 import styled from "styled-components";
-import { Paper, Typography } from "@material-ui/core";
+import { IconButton, Paper, Tooltip, Typography } from "@material-ui/core";
 import { atMinWidth } from "../../../styles/helpers";
 import { SearchField, useSearchFieldState } from "../shared/SearchField";
 import axios from "axios";
@@ -12,6 +12,8 @@ import { PlusIcon } from "../../../assets/icons/Plus.icon";
 import { colors } from "../../../styles/colors";
 import { SuppliersTable } from "./SuppliersTable";
 import { AddNewSupplier } from "./AddNewSupplier";
+import InfoIcon from "@mui/icons-material/Info";
+import { Layout } from "../layout/Layout";
 
 export const SupplierPage = () => {
     const { searchString, handleFilterChange, compare } = useSearchFieldState();
@@ -37,38 +39,55 @@ export const SupplierPage = () => {
     );
 
     return (
-        <PageLayoutWrapper>
-            <StyledPaper elevation={0}>
-                <Typography variant="h1">Suppliers</Typography>
+        <Layout>
+            <PageLayoutWrapper>
+                <StyledPaper elevation={0}>
+                    <Typography variant="h1">Suppliers</Typography>
 
-                <StyledMainContent>
-                    <SearchBlock>
-                        <SearchField
-                            fullWidth
-                            name="searchString"
-                            onChange={handleFilterChange}
-                            placeholder="Search supplier by name or address"
+                    <StyledMainContent>
+                        <SearchBlock>
+                            <SearchField
+                                fullWidth
+                                name="searchString"
+                                onChange={handleFilterChange}
+                                placeholder="Search supplier by name or address"
+                            />
+                            <Button
+                                kind={"primary"}
+                                onClick={() => setDialogOpened(true)}
+                            >
+                                <PlusIcon color={colors.white} />{" "}
+                                <ButtonText>Add new supplier</ButtonText>
+                            </Button>
+                        </SearchBlock>
+                        <StyledContainer>
+                            <Typography variant={"overline"}>
+                                Suppliers
+                            </Typography>
+                            <Tooltip title="Suppler's name and address fields in this table are updatable. Click in the cell to change the value">
+                                <IconButton>
+                                    <InfoIcon />
+                                </IconButton>
+                            </Tooltip>
+                            {suppliers && (
+                                <SuppliersTable suppliers={filteredSuppliers} />
+                            )}
+                        </StyledContainer>
+
+                        <AddNewSupplier
+                            dialogOpened={dialogOpened}
+                            setDialogOpened={setDialogOpened}
                         />
-                        <Button
-                            kind={"primary"}
-                            onClick={() => setDialogOpened(true)}
-                        >
-                            <PlusIcon color={colors.white} />{" "}
-                            <ButtonText>Add new supplier</ButtonText>
-                        </Button>
-                    </SearchBlock>
-                    {suppliers && (
-                        <SuppliersTable suppliers={filteredSuppliers} />
-                    )}
-                    <AddNewSupplier
-                        dialogOpened={dialogOpened}
-                        setDialogOpened={setDialogOpened}
-                    />
-                </StyledMainContent>
-            </StyledPaper>
-        </PageLayoutWrapper>
+                    </StyledMainContent>
+                </StyledPaper>
+            </PageLayoutWrapper>
+        </Layout>
     );
 };
+
+const StyledContainer = styled.div`
+    margin-top: 2rem;
+`;
 
 const StyledMainContent = styled.div`
     margin-top: 2rem;

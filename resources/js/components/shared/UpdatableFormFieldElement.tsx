@@ -1,7 +1,7 @@
 import React, { FC } from "react";
 import { FormikProps, FormikValues } from "formik";
-import { UpdatableFormSelect } from "./formFields/UpdatableFormSelect";
-import { UpdatableFormTextField } from "./formFields/UpdatableFormTextField";
+import { UpdatableFormSelect } from "./updatable/UpdatableFormSelect";
+import { UpdatableFormTextField } from "./updatable/UpdatableFormTextField";
 import { UpdatableField } from "../../utils/types/UpdatableField";
 import { TextFieldData } from "../../utils/types/TextFieldData";
 import { SelectFieldData } from "../../utils/types/SelectFieldData";

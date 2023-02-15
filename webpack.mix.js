@@ -2,11 +2,16 @@ require("dotenv").config();
 const mix = require("laravel-mix");
 
 if (!mix.inProduction()) {
-    // development settings:
-    //     add source maps
     mix.webpackConfig({
         devtool: "source-map",
+        resolve: {
+            fallback: {
+                stream: false,
+            },
+        },
     }).sourceMaps();
+} else {
+    mix.version();
 }
 
 mix.ts("resources/js/index.tsx", "public/js/app.js").react();
