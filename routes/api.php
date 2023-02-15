@@ -23,9 +23,12 @@ use App\Http\Controllers\AuthController;
 // TODO handle authentication
 Route::post('/register', [AuthController::class, 'register']);
 Route::post('/login', [AuthController::class, 'login'])->name("login");
-Route::post('/logout', [AuthController::class, 'logout']);
 
-Route::middleware('auth:sanctum')->group(function () {
+
+Route::group(['middleware' => 'auth:sanctum'], function () {
+    // AUTH routes
+    Route::post('/logout', [AuthController::class, 'logout']);
+    Route::get('/me', [AuthController::class, 'me']);
 
 
     // PRODUCT routes

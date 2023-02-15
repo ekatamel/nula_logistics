@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import { useQuery } from "react-query";
 import { PageLayoutWrapper } from "../shared/PageLayoutWrapper";
 import styled from "styled-components";
@@ -17,6 +17,7 @@ import { AddNewWarehouse } from "./AddNewWarehouse";
 import InfoIcon from "@mui/icons-material/Info";
 import { Layout } from "../layout/Layout";
 import { Alert } from "@material-ui/lab";
+import { AuthContext } from "../auth/authContext";
 
 export const initialState = {
     query: "",
@@ -29,6 +30,8 @@ export const WarehousePage = () => {
     const [filters, setFilters] = useState<WarehouseFilter>(initialState);
     const [dialogOpened, setDialogOpened] = useState(false);
 
+    const { authData } = useContext(AuthContext);
+
     const { totalProductsFrom, totalProductsTo } = filters;
 
     const urlParams = new URLSearchParams({
@@ -36,26 +39,16 @@ export const WarehousePage = () => {
         total_products_from: totalProductsFrom,
         total_products_to: totalProductsTo,
     });
-    const fetchWarehouses = async () => {
-        const response = await axios(`/api/warehouses?${urlParams}`);
-        return response.data;
-    };
 
     const queryKey = `/api/warehouses?${urlParams}`;
 
-    const { data: warehouses } = useQuery<Warehouse[] | undefined>(
-        queryKey,
-        fetchWarehouses
-    );
+    const { data: warehouses } = useQuery<Warehouse[] | undefined>(queryKey, {
+        enabled: authData.signedIn,
+    });
 
-    const fetchSuppliers = async () => {
-        const response = await axios(`/api/suppliers`);
-        return response.data;
-    };
-    const { data: suppliers } = useQuery<Supplier[]>(
-        `/api/suppliers`,
-        fetchSuppliers
-    );
+    const { data: suppliers } = useQuery<Supplier[]>(`/api/suppliers`, {
+        enabled: authData.signedIn,
+    });
 
     return (
         <Layout>

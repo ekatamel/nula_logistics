@@ -16,6 +16,12 @@ use App\Http\Controllers\ReactAppController;
 */
 
 
+// Route::get('/{path?}', [
+//     ReactAppController::class, 'renderApp'
+// ])->where('path', '.*');
+
+
+
 Route::get('/{path?}', [
     ReactAppController::class, 'renderApp'
-])->where('path', '.*');
+])->where('path', '^(?!api).*?');

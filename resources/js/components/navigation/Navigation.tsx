@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
     AppBar,
     IconButton,
@@ -13,14 +13,10 @@ import MenuIcon from "@material-ui/icons/Menu";
 import { theme } from "../../../styles/muiThemes";
 import { Button } from "../shared/Button";
 import { NavGroup } from "./NavGroup";
-import { Mutation, useCustomMutation } from "../../utils/useCustomMutation";
 import { useNavigate } from "react-router";
 import { useQueryNotification } from "../../utils/utils";
-import axios, { AxiosError } from "axios";
-import { FormikSubmitHandler } from "../../utils/types";
-import { useMutation } from "react-query";
+import { useAuth } from "../auth/useAuth";
 
-// TODO add logout button
 export const Navigation = () => {
     const theme = useTheme();
     const [open, setOpen] = useState(false);
@@ -28,23 +24,17 @@ export const Navigation = () => {
     const navigate = useNavigate();
     const { successNotification, errorNotification } = useQueryNotification();
 
-    const logout = () => {
-        return axios.post(`/api/logout`);
-    };
+    const { setLogout } = useAuth();
 
-    const handleLogout = useMutation(logout, {
-        onSuccess: async () => {
+    const handleLogout = async () => {
+        try {
+            await setLogout();
             successNotification("You were successfully logged out !");
             navigate("/login");
-        },
-        onError: (error: any) => {
-            if (error.status != 422) {
-                errorNotification(
-                    "Sorry, something went wrong. Please, try again later"
-                );
-            }
-        },
-    });
+        } catch (e) {
+            errorNotification("Something went wrong");
+        }
+    };
 
     const handleDrawerOpen = () => {
         setOpen(true);
@@ -85,7 +75,7 @@ export const Navigation = () => {
                         fullWidth
                         kind="primary"
                         size={"small"}
-                        onClick={() => handleLogout.mutate()}
+                        onClick={handleLogout}
                     >
                         Sign out
                     </LogoutButton>

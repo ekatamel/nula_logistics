@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import { useParams } from "react-router";
 import axios from "axios";
 import { useQuery } from "react-query";
@@ -23,28 +23,23 @@ import { PlusIcon } from "../../../assets/icons/Plus.icon";
 import { WarehouseInfoTabs } from "./WarehouseInfoTabs";
 import { AssignProductToWarehouse } from "./AssignProductToWarehouse";
 import { Layout } from "../layout/Layout";
+import { AuthContext } from "../auth/authContext";
 
 export const WarehouseDetailPage = () => {
     const { id } = useParams();
     const [dialogOpened, setDialogOpened] = useState(false);
 
-    const fetchWarehouse = async () => {
-        const response = await axios(`/api/warehouses/${id}`);
-        return response.data;
-    };
+    const { authData } = useContext(AuthContext);
 
     const queryKey = `/api/warehouses/${id}`;
 
-    const { data: warehouse } = useQuery<Warehouse>(queryKey, fetchWarehouse);
+    const { data: warehouse } = useQuery<Warehouse>(queryKey, {
+        enabled: authData.signedIn,
+    });
 
-    const fetchSuppliers = async () => {
-        const response = await axios(`/api/suppliers`);
-        return response.data;
-    };
-    const { data: suppliers } = useQuery<Supplier[]>(
-        `/api/suppliers`,
-        fetchSuppliers
-    );
+    const { data: suppliers } = useQuery<Supplier[]>(`/api/suppliers`, {
+        enabled: authData.signedIn,
+    });
 
     const suppliersSelect = suppliers && getSupplierSelectGroup(suppliers);
     const src =

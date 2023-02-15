@@ -9,7 +9,6 @@ import { useQueryNotification } from "../../utils/utils";
 import { FormikSubmitHandler, Product } from "../../utils/types";
 import { AxiosError } from "axios";
 import { useNavigate } from "react-router";
-import { UserContext } from "./UserContext";
 
 const initValues = {
     name: "",
@@ -20,7 +19,6 @@ const initValues = {
 export const Registration = () => {
     const { successNotification, errorNotification } = useQueryNotification();
     const navigate = useNavigate();
-    const { handleLogin } = useContext(UserContext);
 
     const createNewSubjectMutation: Mutation<Product> = (initVals) => ({
         path: "/api/register",
@@ -32,10 +30,9 @@ export const Registration = () => {
         createNewSubjectMutation,
         {
             onSuccess: async (data: Record<string, number | any>) => {
-                const response = await data.json();
-                handleLogin(response);
+                await data.json();
                 successNotification("New user was created!");
-                navigate("/");
+                navigate("/login");
             },
             onError: (error: AxiosError) => {
                 if (error.status != 422) {

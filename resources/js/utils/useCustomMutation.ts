@@ -39,13 +39,15 @@ export function useCustomMutation<
         useCallback(
             async (variables) => {
                 const { method, path, params } = mutation(variables);
+                const token = localStorage.getItem("token") || "";
                 const fetchOptions = {
                     method: method || "POST",
                     headers: new Headers({
-                        "X-CSRF-Token": csrfToken ? csrfToken : "",
+                        "X-CSRF-Token": csrfToken || "",
                         Accept: "application/json",
                         "Content-Type": "application/json",
                         "X-Requested-With": "XMLHttpRequest",
+                        Authorization: token,
                     }),
                     body: params ? JSON.stringify(params) : undefined,
                     credentials: "include",

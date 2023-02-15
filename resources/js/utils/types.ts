@@ -1,5 +1,10 @@
 import { FormikHelpers } from "formik";
 
+export interface User {
+    name: string;
+    signedIn: boolean;
+}
+
 export interface ProductFilter {
     name: string;
     priceFrom: string;

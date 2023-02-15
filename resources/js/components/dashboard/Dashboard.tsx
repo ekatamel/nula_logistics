@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React, { useContext, useEffect } from "react";
 import { PageLayoutWrapper } from "../shared/PageLayoutWrapper";
 import styled, { css } from "styled-components";
 import {
@@ -13,11 +13,10 @@ import { theme } from "../../../styles/muiThemes";
 import PaidIcon from "@mui/icons-material/Paid";
 import OtherHousesIcon from "@mui/icons-material/OtherHouses";
 import LocalShippingIcon from "@mui/icons-material/LocalShipping";
-import axios from "axios";
 import { useQuery } from "react-query";
 import InfoIcon from "@mui/icons-material/Info";
 import { Layout } from "../layout/Layout";
-import { UserContext } from "../auth/UserContext";
+import { AuthContext } from "../auth/authContext";
 
 const useStyles = makeStyles(() => ({
     root: {
@@ -27,13 +26,12 @@ const useStyles = makeStyles(() => ({
 
 export const Dashboard = () => {
     const classes = useStyles();
-    const fetchStatistics = async () => {
-        const response = await axios(`/api/stats`);
-        return response.data;
-    };
-    const { data: statistics } = useQuery<any>(`/api/stats`, fetchStatistics);
 
-    const { userData } = useContext(UserContext);
+    const { authData } = useContext(AuthContext);
+
+    const { data: statistics } = useQuery<any>(`/api/stats`, {
+        enabled: authData.signedIn,
+    });
 
     const mostExpensiveProduct = statistics?.most_expensive_product;
     const biggestSuppplier = statistics?.biggest_supplier;
@@ -45,9 +43,11 @@ export const Dashboard = () => {
     return (
         <Layout>
             <PageLayoutWrapper>
-                <StyledTypography variant="h1">
-                    {`Hello, ${userData?.name}!`}
-                </StyledTypography>
+                {authData.signedIn && authData.user && (
+                    <StyledTypography variant="h1">
+                        {`Hello, ${authData.user.name}!`}
+                    </StyledTypography>
+                )}
                 <Grid>
                     <StyledPaper elevation={10}>
                         <Typography variant="h2">Statistics</Typography>

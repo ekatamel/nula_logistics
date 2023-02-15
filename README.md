@@ -2,7 +2,7 @@
 
 Nula logistics project was created in order to fulfill requirements of the assignment as part of job application process.
 
-GitHub repo: blog.ekaterinamelnichuk.com
+GitHub repo: https://github.com/ekatamel/nula_logistics.git
 
 The basic user functionality of the website includes:
 
@@ -31,8 +31,10 @@ PHP & Laravel:
 -   seeding the database with products, suppliers, warehouses
 -   exposing API endpoints for frontend (React) usage
 -   filtering data results based on query parameters sent by frontend
+-   providing authentication tokens to SPA (Laravel Sanctum)
+-   swagger generation (using darkaonline/l5-swagger library)
 
-Databases:
+Database:
 
 -   database engine: MySQL
 -   database administration tool: PHP My Admin
@@ -41,9 +43,11 @@ Databases:
     Model is available at:
     https://dbdiagram.io/d/63e6bf94296d97641d801850
 
-API documentation:
+API
 
--   could be found in /storage/api-docs (api-docs.json or api-docs.yaml). Generated using darkaonline/l5-swagger library
+API endpoints for the frontend are handled by specific entity controller (e.g. ProductController, WarehouseController). Routes for these endpoints are provided in api.php.
+
+API documentation could be found in `/storage/api-docs` (api-docs.json or api-docs.yaml). Generated using darkaonline/l5-swagger library
 
 ### Frontend
 
@@ -54,6 +58,7 @@ React:
 -   rendering pages and components
 -   making API requests (React Query) to query data (GET) and mutate (POST, PATCH, DELETE) data. For Mutation own custom hook is created.
 -   filtering data for not large amount (e.g. Suppliers)
+-   handling authentication workflow
 
 Additional React libraries used in this project:
 
@@ -80,25 +85,58 @@ Howw React app is rendered in Laravel project:
 
 In order to set up local development environment, follow these steps:
 
-1.
+Prerequisites: Before you start setting up your local development environment, make sure you have the following installed on your computer:
+
+-   Git
+-   Docker
+
+1. Clone the project repository from GitHub:
 
 ```shell script
-docker-compose up -d
+git clone https://github.com/ekatamel/nula_logistics.git
 ```
+
+2. Navigate to the project directory:
+
+```shell script
+cd your-project
+```
+
+3. Create a .env file with your project's environment variables. You can use the .env.example file as a template:
+
+```shell script
+cp .env.example .env
+```
+
+4. Build the Docker containers:
+
+```shell script
+docker-compose build
+```
+
+5. Start the Docker containers:
+
+```shell script
+docker-compose up
+```
+
+6. Start backend
 
 ```shell script
 php artisan serve
+```
+
+7. Run frontend
+
+```shell script
+npm run dev
 ```
 
 ```shell script
 npm run watch
 ```
 
-## API
-
-API endpoints for the frontend are handled by specific entity controller (e.g. ProductController, WarehouseController). Routes for these endpoints are provided in api.php.
-
-API documentation is available at : https://app.swaggerhub.com/apis-docs/KATERINKAMELNICHUK/Blog/1.0.0
+8. Go to your localhost to see website, e.g. http://127.0.0.1:8000/
 
 ## Possible impovements
 

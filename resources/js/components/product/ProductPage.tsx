@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { useQuery } from "react-query";
 import { PageLayoutWrapper } from "../shared/PageLayoutWrapper";
 import styled from "styled-components";
@@ -17,6 +17,7 @@ import { AddNewProduct } from "./AddNewProduct";
 import InfoIcon from "@mui/icons-material/Info";
 import { Layout } from "../layout/Layout";
 import { Alert } from "@material-ui/lab";
+import { AuthContext } from "../auth/authContext";
 
 export const initialState = {
     name: "",
@@ -31,6 +32,8 @@ export const ProductPage = () => {
     const [filters, setFilters] = useState<ProductFilter>(initialState);
     const [dialogOpened, setDialogOpened] = useState(false);
 
+    const { authData } = useContext(AuthContext);
+
     const { priceFrom, priceTo, dateAddedFrom, dateAddedTo } = filters;
 
     const urlParams = new URLSearchParams({
@@ -40,23 +43,15 @@ export const ProductPage = () => {
         date_added_from: dateAddedFrom,
         date_added_to: dateAddedTo,
     });
-    const fetchProducts = async () => {
-        const response = await axios(`/api/products?${urlParams}`);
-        return response.data;
-    };
-
     const queryKey = `/api/products?${urlParams}`;
 
-    const { data: products } = useQuery<Product[]>(queryKey, fetchProducts);
+    const { data: products } = useQuery<Product[]>(queryKey, {
+        enabled: authData.signedIn,
+    });
 
-    const fetchSuppliers = async () => {
-        const response = await axios(`/api/suppliers`);
-        return response.data;
-    };
-    const { data: suppliers } = useQuery<Supplier[]>(
-        `/api/suppliers`,
-        fetchSuppliers
-    );
+    const { data: suppliers } = useQuery<Supplier[]>(`/api/suppliers`, {
+        enabled: authData.signedIn,
+    });
 
     return (
         <Layout>

@@ -1,20 +1,19 @@
-import axios from "axios";
 import React, { useEffect } from "react";
-import { useQuery } from "react-query";
 import styled from "styled-components";
 import { theme } from "../../../styles/muiThemes";
 import { Navigation } from "../navigation/Navigation";
+import { useAuth } from "../auth/useAuth";
 
 interface Props {
     children: JSX.Element[] | JSX.Element;
 }
 
 export const Layout = ({ children }: Props) => {
-    const fetchSuppliers = async () => {
-        const response = await axios(`/api/user`);
-        return response.data;
-    };
-    // const { data: user } = useQuery<any>(`/api/suppliers`, fetchSuppliers);
+    const { loginUserOnStartup } = useAuth();
+
+    useEffect(() => {
+        loginUserOnStartup();
+    }, []);
 
     return (
         <PageLayout>

@@ -1,4 +1,4 @@
-import React, { useMemo, useState } from "react";
+import React, { useContext, useMemo, useState } from "react";
 import { useQuery } from "react-query";
 import { PageLayoutWrapper } from "../shared/PageLayoutWrapper";
 import styled from "styled-components";
@@ -14,19 +14,17 @@ import { SuppliersTable } from "./SuppliersTable";
 import { AddNewSupplier } from "./AddNewSupplier";
 import InfoIcon from "@mui/icons-material/Info";
 import { Layout } from "../layout/Layout";
+import { AuthContext } from "../auth/authContext";
 
 export const SupplierPage = () => {
     const { searchString, handleFilterChange, compare } = useSearchFieldState();
     const [dialogOpened, setDialogOpened] = useState(false);
 
-    const fetchSuppliers = async () => {
-        const response = await axios(`/api/suppliers`);
-        return response.data;
-    };
-    const { isLoading, data: suppliers } = useQuery<Supplier[]>(
-        `/api/suppliers`,
-        fetchSuppliers
-    );
+    const { authData } = useContext(AuthContext);
+
+    const { data: suppliers } = useQuery<Supplier[]>(`/api/suppliers`, {
+        enabled: authData.signedIn,
+    });
 
     const filteredSuppliers = useMemo(
         () =>

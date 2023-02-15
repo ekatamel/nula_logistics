@@ -19,7 +19,7 @@ class AuthController extends Controller
             'email' => 'required|string|max:255|unique:users',
             'password' => 'required|string|min:8',
         ]);
-        // Hash the password
+
         $hashedPassword = Hash::make($request->password);
 
         $user = User::create([
@@ -28,50 +28,52 @@ class AuthController extends Controller
             'password' => $hashedPassword,
         ]);
 
-        $token = $user->createToken('token')->plainTextToken;
-
-        $cookie = cookie('jwt', $token, 60 * 24);
-
         return response()->json([
-            'message' => 'User created successfully',
+            'status' => true,
             'user' => $user
-        ], 201)->withCookie($cookie);
+        ], 201);
     }
+
 
     public function login(Request $request)
     {
         $this->validate($request, [
             'email' => 'required|string|max:255',
             'password' => 'required|string|min:8',
+            'remember_me' => 'boolean'
         ]);
 
-        $email = $request->input('email');
-        $user = User::where('email', $email)->first();
+        $user = User::where('email', $request->email)->first();
 
-        if (!Auth::attempt($request->only('email', 'password'))) {
-            return response([
+        if (!$user || !Hash::check($request->password, $user->password)) {
+            return response()->json([
+                'status' => false,
                 'message' => 'Invalid credentials'
             ], 401);
         }
 
-        $user = Auth::user();
+        $token = $user->createToken('access_token', ['server:update']);
 
-
-        $token = $user->createToken('token')->plainTextToken;
-
-        $cookie = cookie('jwt', $token, 60 * 24);
-
-        return response([
-            'message' => 'Success',
+        return response()->json([
+            'status' => true,
+            'access_token' => $token->plainTextToken,
+            'token_type' => 'Bearer',
             'user' => $user
-        ])->withCookie($cookie);
+        ]);
     }
 
-    public function logout()
+
+    public function logout(Request $request)
     {
-        $cookie = Cookie::forget('jwt');
-        return response()->json([
-            'message' => 'User logged out successfully'
-        ], 200)->withCookie($cookie);
+        auth('web')->logout();
+        $request->session()->invalidate();
+        $request->session()->regenerateToken();
+        return response()->json(['status' => true, 'message' => 'logged out']);
+    }
+
+
+    public function me()
+    {
+        return response()->json(['status' => true, 'user' => auth()->user()]);
     }
 }

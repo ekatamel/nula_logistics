@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React, { useContext, useEffect } from "react";
 import { Paper, TextField, Typography } from "@material-ui/core";
 import { atMinWidth } from "../../../styles/helpers";
 import styled from "styled-components";
@@ -9,7 +9,8 @@ import { useQueryNotification } from "../../utils/utils";
 import { FormikSubmitHandler, Product } from "../../utils/types";
 import { AxiosError } from "axios";
 import { useNavigate } from "react-router";
-import { UserContext } from "./UserContext";
+import { useAuth } from "../auth/useAuth";
+import { AuthContext } from "../auth/authContext";
 
 const initValues = {
     email: "",
@@ -17,9 +18,12 @@ const initValues = {
 };
 
 export const Login = () => {
-    const { handleLogin } = useContext(UserContext);
     const { successNotification, errorNotification } = useQueryNotification();
     const navigate = useNavigate();
+
+    const { setAsLogged } = useAuth();
+    const { authData } = useContext(AuthContext);
+    const isSignedIn = authData.signedIn;
 
     const createNewSubjectMutation: Mutation<Product> = (initVals) => ({
         path: "/api/login",
@@ -32,8 +36,13 @@ export const Login = () => {
         {
             onSuccess: async (data: Record<string, number | any>) => {
                 const response = await data.json();
-                handleLogin(response);
-                navigate("/");
+                try {
+                    setAsLogged(response);
+                    successNotification("You were successfully logged in!");
+                    navigate("/");
+                } catch (e) {
+                    errorNotification("Something went wrong");
+                }
             },
             onError: (error: AxiosError) => {
                 if (error.status == 401) {
@@ -51,11 +60,16 @@ export const Login = () => {
         values,
         { setErrors }
     ) => {
-        console.log("values", values);
         await newSubjectMutation.mutateAsync(values).catch((err) => {
             setErrors(err.errors);
         });
     };
+
+    useEffect(() => {
+        if (isSignedIn) {
+            navigate("/");
+        }
+    }, [isSignedIn]);
 
     return (
         <PageWrapper>

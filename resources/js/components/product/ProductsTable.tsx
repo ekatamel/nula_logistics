@@ -32,21 +32,22 @@ export const ProductsTable = ({ products, queryKey, suppliers }: Props) => {
                     </TableRow>
                 </TableHead>
                 <TableBody>
-                    {areNoProducts && (
+                    {areNoProducts ? (
                         <TableRow>
                             <TableCell>
                                 No products fulfill applied filters.
                             </TableCell>
                         </TableRow>
+                    ) : (
+                        products?.map((product: Product) => (
+                            <TableProductRow
+                                key={product.id}
+                                product={product}
+                                queryKey={queryKey}
+                                suppliers={suppliers}
+                            />
+                        ))
                     )}
-                    {products?.map((product: Product) => (
-                        <TableProductRow
-                            key={product.id}
-                            product={product}
-                            queryKey={queryKey}
-                            suppliers={suppliers}
-                        />
-                    ))}
                 </TableBody>
             </Table>
         </TableContainer>

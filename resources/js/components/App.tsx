@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import {
     createBrowserRouter,
     createRoutesFromElements,
@@ -16,10 +16,30 @@ import { SupplierPage } from "./supplier/SupplierPage";
 import { WarehouseDetailPage } from "./warehouse/WarehouseDetailPage";
 import { Registration } from "./auth/Registration";
 import { Login } from "./auth/Login";
-import { UserContextProvider } from "./auth/UserContext";
+import { useAuth } from "../components/auth/useAuth";
+import { AuthContext } from "../components/auth/authContext";
+import { fetchHelper } from "../utils/apiHelpers";
 
 const App = () => {
-    const queryClient = new QueryClient();
+    const { userData } = useAuth();
+    const [authData, setAuthData] = useState({
+        signedIn: userData.signedIn,
+        user: userData.user,
+    });
+
+    const defaultQueryFn = async ({ queryKey }) => {
+        return await fetchHelper(queryKey[0]);
+    };
+
+    const queryClient = new QueryClient({
+        defaultOptions: {
+            queries: {
+                queryFn: defaultQueryFn,
+                refetchOnWindowFocus: false,
+            },
+        },
+    });
+
     const routerAuth = createBrowserRouter(
         createRoutesFromElements([
             <Route path="/" element={<Dashboard />} />,
@@ -33,17 +53,15 @@ const App = () => {
     );
 
     return (
-        <>
-            <ThemeProvider theme={theme}>
-                <QueryClientProvider client={queryClient}>
-                    <UserContextProvider>
-                        <SnackProvider>
-                            {<RouterProvider router={routerAuth} />}
-                        </SnackProvider>
-                    </UserContextProvider>
-                </QueryClientProvider>
-            </ThemeProvider>
-        </>
+        <QueryClientProvider client={queryClient}>
+            <AuthContext.Provider value={{ authData, setAuthData }}>
+                <ThemeProvider theme={theme}>
+                    <SnackProvider>
+                        {<RouterProvider router={routerAuth} />}
+                    </SnackProvider>
+                </ThemeProvider>
+            </AuthContext.Provider>
+        </QueryClientProvider>
     );
 };
 
