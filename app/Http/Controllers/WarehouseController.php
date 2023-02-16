@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Models\Warehouse;
 use App\Models\Product;
 use App\Models\ProductWarehouse;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 
 class WarehouseController extends Controller
 {
@@ -466,7 +467,7 @@ class WarehouseController extends Controller
      *     ),
      * )
      */
-    public function delete($id)
+    public function destroy($id)
     {
         $warehouse = Warehouse::findOrFail($id);
         $warehouse->delete();
@@ -475,7 +476,7 @@ class WarehouseController extends Controller
 
     /**
      * @OA\Patch(
-     *   path="/warehouses/{warehouseId}/products",
+     *   path="/warehouses/{warehouseId}/products/{productId}",
      *   summary="Assign a Product to a Warehouse",
      *   tags={"Warehouse"},
      *   @OA\Parameter(
@@ -485,10 +486,16 @@ class WarehouseController extends Controller
      *     required=true,
      *     @OA\Schema(type="integer")
      *   ),
+     *   @OA\Parameter(
+     *     name="productId",
+     *     in="path",
+     *     description="ID of the Product",
+     *     required=true,
+     *     @OA\Schema(type="integer")
+     *   ),
      *   @OA\RequestBody(
      *     required=true,
      *     @OA\JsonContent(
-     *       @OA\Property(property="product_id", type="integer", description="ID of the Product"),
      *       @OA\Property(property="quantity", type="integer", description="Quantity of the Product")
      *     )
      *   ),
@@ -502,17 +509,19 @@ class WarehouseController extends Controller
      *   )
      * )
      */
-    public function assignProductToWarehouse(Request $request, $warehouseId)
+    public function assignProductToWarehouse(Request $request, $warehouseId, $productId)
     {
         $validatedData = $request->validate([
-            'product_id' => 'required|integer',
             'quantity' => 'required|integer',
         ]);
 
-        $product_id = $request->input('product_id') ?? null;
+        try {
+            $warehouse = Warehouse::findOrFail($warehouseId);
+            $product = Product::findOrFail($productId);
+        } catch (ModelNotFoundException $e) {
+            return response()->json(['message' => 'The given ID was not found'], 404);
+        }
 
-        $warehouse = Warehouse::findOrFail($warehouseId);
-        $product = Product::findOrFail($product_id);
 
         $pivot = $product->warehouses()->wherePivot('warehouse_id', $warehouseId)->first();
 

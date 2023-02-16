@@ -34,6 +34,7 @@ export const AssignProductToWarehouse = ({
 }: Props) => {
     const queryClient = useQueryClient();
     const [chosenSupplierId, setChosenSupplierId] = useState<string>("");
+    const [chosenProductId, setChosenProductId] = useState<string>("");
 
     const fetchSuppliers = async () => {
         const response = await axios(`/api/suppliers`);
@@ -54,7 +55,9 @@ export const AssignProductToWarehouse = ({
     const { successNotification, errorNotification } = useQueryNotification();
 
     const createNewSubjectMutation: Mutation<Product> = (initVals) => ({
-        path: `/api/warehouses/${warehouseId}/products`,
+        path: `/api/warehouses/${warehouseId}/products/${
+            chosenProductId ? chosenProductId : null
+        }`,
         method: "PATCH",
         params: initVals,
     });
@@ -70,11 +73,11 @@ export const AssignProductToWarehouse = ({
                 setDialogOpened(false);
             },
             onError: (error: AxiosError) => {
-                if (error.status != 422) {
-                    errorNotification(
-                        "Sorry, something went wrong. Please, try again later"
-                    );
-                }
+                errorNotification(
+                    error.message
+                        ? error.message
+                        : "Sorry, something went wrong. Please, try again later"
+                );
             },
         },
         true
@@ -105,6 +108,8 @@ export const AssignProductToWarehouse = ({
                             submitForm,
                         } = formikProps;
 
+                        console.log("errors", errors);
+
                         return (
                             <>
                                 {suppliers && (
@@ -131,26 +136,24 @@ export const AssignProductToWarehouse = ({
                                         placeholder={"Select supplier"}
                                     />
                                 )}
-                                {errors && errors["supplier_id"]?.[0] && (
-                                    <StyledError>
-                                        The field supplier is required
-                                    </StyledError>
-                                )}
 
                                 <StyledFormSelect
                                     value={values.product_id}
                                     values={chosenSupplierProductsSelect || []}
                                     name={`product_id`}
                                     label={"Product"}
-                                    onChange={handleChange}
+                                    onChange={(
+                                        e: React.ChangeEvent<{
+                                            name: string;
+                                            value: string;
+                                        }>
+                                    ) => {
+                                        handleChange(e);
+                                        setChosenProductId(e.target.value);
+                                    }}
                                     required={true}
                                     placeholder={"Select product"}
                                 />
-                                {errors && errors["product_id"]?.[0] && (
-                                    <StyledError>
-                                        The field product is required
-                                    </StyledError>
-                                )}
                                 <StyledTextField
                                     fullWidth
                                     required={true}
@@ -159,8 +162,8 @@ export const AssignProductToWarehouse = ({
                                     label={"Quantity"}
                                     placeholder={"Enter quantity"}
                                     onChange={handleChange}
-                                    error={Boolean(errors["quantity"])}
-                                    helperText={<>{errors["quantity"]?.[0]}</>}
+                                    // error={Boolean(errors["quantity"])}
+                                    // helperText={<>{errors["quantity"]?.[0]}</>}
                                 />
 
                                 <ButtonWrapper>

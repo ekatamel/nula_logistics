@@ -917,17 +917,24 @@ paths:
           description: 'The requested Warehouse was not found'
         400:
           description: 'Bad request'
-  '/warehouses/{warehouseId}/products':
+  '/warehouses/{warehouseId}/products/{productId}':
     patch:
       tags:
         - Warehouse
       summary: 'Assign a Product to a Warehouse'
-      operationId: d15de4b047c574fb56d1421bdb3b500d
+      operationId: 9e18f977f9ba87c0b06337bb93e41ee0
       parameters:
         -
           name: warehouseId
           in: path
           description: 'ID of the Warehouse'
+          required: true
+          schema:
+            type: integer
+        -
+          name: productId
+          in: path
+          description: 'ID of the Product'
           required: true
           schema:
             type: integer
@@ -937,9 +944,6 @@ paths:
           application/json:
             schema:
               properties:
-                product_id:
-                  description: 'ID of the Product'
-                  type: integer
                 quantity:
                   description: 'Quantity of the Product'
                   type: integer

@@ -1,4 +1,4 @@
-import React, { useContext, useMemo, useState } from "react";
+import React, { useMemo, useState } from "react";
 import { useQuery } from "react-query";
 import { PageLayoutWrapper } from "../shared/PageLayoutWrapper";
 import styled from "styled-components";
@@ -12,18 +12,13 @@ import { colors } from "../../../styles/colors";
 import { SuppliersTable } from "./SuppliersTable";
 import { AddNewSupplier } from "./AddNewSupplier";
 import InfoIcon from "@mui/icons-material/Info";
-import { AuthContext } from "../auth/authContext";
 import { Layout } from "../layout/Layout";
 
 export const SupplierPage = () => {
     const { searchString, handleFilterChange, compare } = useSearchFieldState();
     const [dialogOpened, setDialogOpened] = useState(false);
 
-    const { authData } = useContext(AuthContext);
-
-    const { data: suppliers } = useQuery<Supplier[]>(`/api/suppliers`, {
-        enabled: authData.signedIn,
-    });
+    const { data: suppliers } = useQuery<Supplier[]>(`/api/suppliers`);
 
     const filteredSuppliers = useMemo(
         () =>

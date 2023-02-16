@@ -1,7 +1,6 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\UserController;
 use App\Http\Controllers\ReactAppController;
 
 /*
@@ -14,12 +13,6 @@ use App\Http\Controllers\ReactAppController;
 | contains the "web" middleware group. Now create something great!
 |
 */
-
-
-// Route::get('/{path?}', [
-//     ReactAppController::class, 'renderApp'
-// ])->where('path', '.*');
-
 
 
 Route::get('/{path?}', [

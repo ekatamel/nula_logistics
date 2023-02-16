@@ -4,11 +4,7 @@ import { atMinWidth } from "../../../styles/helpers";
 import styled from "styled-components";
 import { Formik } from "formik";
 import { Button } from "../shared/Button";
-import { useCustomMutation, Mutation } from "../../utils/useCustomMutation";
-import { useQueryNotification } from "../../utils/utils";
-import { FormikSubmitHandler, Product } from "../../utils/types";
-import { AxiosError } from "axios";
-import { useNavigate } from "react-router";
+import { AuthContext } from "./AuthContext";
 
 const initValues = {
     name: "",
@@ -17,42 +13,8 @@ const initValues = {
 };
 
 export const Registration = () => {
-    const { successNotification, errorNotification } = useQueryNotification();
-    const navigate = useNavigate();
+    const { registerNewUser } = useContext(AuthContext);
 
-    const createNewSubjectMutation: Mutation<Product> = (initVals) => ({
-        path: "/api/register",
-        method: "POST",
-        params: initVals,
-    });
-
-    const newSubjectMutation = useCustomMutation(
-        createNewSubjectMutation,
-        {
-            onSuccess: async (data: Record<string, number | any>) => {
-                await data.json();
-                successNotification("New user was created!");
-                navigate("/login");
-            },
-            onError: (error: AxiosError) => {
-                if (error.status != 422) {
-                    errorNotification(
-                        "Sorry, something went wrong. Please, try again later"
-                    );
-                }
-            },
-        },
-        true
-    );
-
-    const formikSubmit: FormikSubmitHandler<any> = async (
-        values,
-        { setErrors }
-    ) => {
-        await newSubjectMutation.mutateAsync(values).catch((err) => {
-            setErrors(err.errors);
-        });
-    };
     return (
         <PageWrapper>
             <StyledTypography variant="overline">
@@ -60,7 +22,13 @@ export const Registration = () => {
             </StyledTypography>
             <StyledPaper elevation={10}>
                 <Typography variant="h1">Registration</Typography>
-                <Formik initialValues={initValues} onSubmit={formikSubmit}>
+                <Formik
+                    initialValues={initValues}
+                    onSubmit={(values) => {
+                        const { name, email, password } = values;
+                        registerNewUser(name, email, password);
+                    }}
+                >
                     {(formikProps) => {
                         const {
                             values,

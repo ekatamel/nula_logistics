@@ -4,10 +4,11 @@ import { useQuery } from "react-query";
 import { Supplier, Warehouse } from "../../utils/types";
 import { PageLayoutWrapper } from "../shared/PageLayoutWrapper";
 import styled from "styled-components";
-import { Paper, Typography } from "@material-ui/core";
+import { IconButton, Paper, Tooltip, Typography } from "@material-ui/core";
 import { atMinWidth } from "../../../styles/helpers";
 import { getSupplierSelectGroup } from "../../utils/utils";
 import { colors } from "../../../styles/colors";
+import InfoIcon from "@mui/icons-material/Info";
 import {
     TableContainer,
     Table,
@@ -22,23 +23,16 @@ import { PlusIcon } from "../../../assets/icons/Plus.icon";
 import { WarehouseInfoTabs } from "./WarehouseInfoTabs";
 import { AssignProductToWarehouse } from "./AssignProductToWarehouse";
 import { Layout } from "../layout/Layout";
-import { AuthContext } from "../auth/authContext";
 
 export const WarehouseDetailPage = () => {
     const { id } = useParams();
     const [dialogOpened, setDialogOpened] = useState(false);
 
-    const { authData } = useContext(AuthContext);
-
     const queryKey = `/api/warehouses/${id}`;
 
-    const { data: warehouse } = useQuery<Warehouse>(queryKey, {
-        enabled: authData.signedIn,
-    });
+    const { data: warehouse } = useQuery<Warehouse>(queryKey);
 
-    const { data: suppliers } = useQuery<Supplier[]>(`/api/suppliers`, {
-        enabled: authData.signedIn,
-    });
+    const { data: suppliers } = useQuery<Supplier[]>(`/api/suppliers`);
 
     const suppliersSelect = suppliers && getSupplierSelectGroup(suppliers);
     const src =
@@ -90,6 +84,18 @@ export const WarehouseDetailPage = () => {
                                     <ButtonText>Assign new product</ButtonText>
                                 </Button>
                             </TableHeaderContainer>
+
+                            <div>
+                                <Typography variant={"overline"}>
+                                    Products in the warehouse
+                                </Typography>
+
+                                <Tooltip title="Amount of products in stock is editable. Click in the cell to change the value">
+                                    <IconButton>
+                                        <InfoIcon />
+                                    </IconButton>
+                                </Tooltip>
+                            </div>
 
                             <TableContainer>
                                 <Table>

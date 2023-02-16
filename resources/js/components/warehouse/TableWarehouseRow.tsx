@@ -37,11 +37,17 @@ export const TableWarehouseRow = ({
     } = warehouse;
     const { successNotification, errorNotification } = useQueryNotification();
 
-    const deleteProduct = (id: number) => {
-        return axios.delete(`/api/warehouses/${id}`);
+    const token = localStorage.getItem("auth_token");
+
+    const deleteWarehouse = (id: number) => {
+        return axios.delete(`/api/warehouses/${id}`, {
+            headers: {
+                Authorization: token,
+            },
+        });
     };
 
-    const handleDelete = useMutation(deleteProduct, {
+    const handleDelete = useMutation(deleteWarehouse, {
         onSuccess: async () => {
             await queryClient.refetchQueries(queryKey);
             successNotification("Warehouse was deleted!");

@@ -21,6 +21,7 @@ export const ProductFilters: FC<Props> = ({ filters, setFilters }) => {
         <FilterContainer>
             <DateFilter filters={filters} setFilters={setFilters} />
             <AmountFilter filters={filters} setFilters={setFilters} />
+            {/* TODO clear filters doesn't reset for amount*/}
             <StyledButton kind={"primary"} onClick={clearFilters}>
                 Clear filters
             </StyledButton>

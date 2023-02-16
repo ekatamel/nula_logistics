@@ -19,8 +19,6 @@ use App\Http\Controllers\AuthController;
 |
 */
 
-
-// TODO handle authentication
 Route::post('/register', [AuthController::class, 'register']);
 Route::post('/login', [AuthController::class, 'login'])->name("login");
 
@@ -98,7 +96,7 @@ Route::group(['middleware' => 'auth:sanctum'], function () {
         WarehouseController::class, "destroy"
     ])->whereNumber("id")->name("warehouses.destroy");
 
-    Route::patch('/warehouses/{warehouseId}/products', [
+    Route::patch('/warehouses/{warehouseId}/products/{productId}', [
         WarehouseController::class, 'assignProductToWarehouse'
     ])->whereNumber("warehouseId");
 

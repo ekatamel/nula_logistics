@@ -28,7 +28,6 @@ PHP & Laravel:
 -   setting up database
 -   creating DB migrations
 -   defining DB models and relationships
--   seeding the database with products, suppliers, warehouses
 -   exposing API endpoints for frontend (React) usage
 -   filtering data results based on query parameters sent by frontend
 -   providing authentication tokens to SPA (Laravel Sanctum)
@@ -85,10 +84,15 @@ Howw React app is rendered in Laravel project:
 
 In order to set up local development environment, follow these steps:
 
-Prerequisites: Before you start setting up your local development environment, make sure you have the following installed on your computer:
+### Prerequisites
 
--   Git
+Before you start setting up your local development environment, make sure you have the following installed on your computer:
+
 -   Docker
+-   PHP installed on your system (version 7.3 or higher) - not applicable with Docker
+-   Composer installed on your system - not applicable with Docker
+-   Node.js and npm installed on your system - not applicable with Docker
+-   Git installed on your system - not applicable with Docker
 
 1. Clone the project repository from GitHub:
 
@@ -108,6 +112,13 @@ cd your-project
 cp .env.example .env
 ```
 
+Set these variables to run docker:
+
+```shell script
+MYSQL_ROOT_PASSWORD: ${DB_PASSWORD}
+MYSQL_DATABASE: ${DB_USERNAME}
+```
+
 4. Build the Docker containers:
 
 ```shell script
@@ -120,13 +131,15 @@ docker-compose build
 docker-compose up
 ```
 
-6. Start backend
+6. Once you have PHPMyAdmin up and running, you can go to `http://localhost:8080/` (or other URL based on your config), create a database and update your .env variables
+
+7. Start backend
 
 ```shell script
 php artisan serve
 ```
 
-7. Run frontend
+8. Run frontend
 
 ```shell script
 npm run dev
@@ -138,6 +151,12 @@ npm run watch
 
 8. Go to your localhost to see website, e.g. http://127.0.0.1:8000/
 
+9. (Optional) Generate swagger and paste yaml file content in Swagger editor
+
+```shell script
+php artisan l5-swagger:generate
+```
+
 ## Possible impovements
 
 -   Write unit and end-to-end tests
@@ -148,5 +167,17 @@ npm run watch
 -   Set up Prettier, Linter in a project
 -   Make authentification more sophisticated (strong password validation, redirect user to URL he/she tried to access before login, token validation e.g. JWT, setting token expiration, handle auth via cookies etc.)
 -   Provide frontend validation (apart from backend validation and Formik errors)
--   Define proper schems and references in swagger API documentation
+-   Define proper schema and references in swagger API documentation
 -   Make components more reusable
+-   Better error handling
+-   Fix some bugs (e.g. clear filters doesn't reset for amount, issues with responsivity in dashboard, do not allow to delete product if already stored in the warehouse - delete product from warehouse first, fix console log issues)
+-   Use meaningful and clean commit history :)
+
+## User interface sreenshots
+
+![Screenshot](/public/images/screenshots/s1.png)
+![Screenshot](/public/images/screenshots/s2.png)
+![Screenshot](/public/images/screenshots/s3.png)
+![Screenshot](/public/images/screenshots/s4.png)
+![Screenshot](/public/images/screenshots/s5.png)
+![Screenshot](/public/images/screenshots/s6.png)
