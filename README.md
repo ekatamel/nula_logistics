@@ -7,7 +7,7 @@ GitHub repo: https://github.com/ekatamel/nula_logistics.git
 The basic user functionality of the website includes:
 
 -   Registrations, login/logout (app can be used by autenticated users only)
--   Viewing app dashboard with logistics statistics and shortcuts for quick access
+-   Viewing app dashboard with logistics statistics
 -   Displaying all products and filtering by name, price and date, when the product was created
 -   Displaying all suppliers and filtering by name and address
 -   Displaying all warehouses and filtering by address, supplier and number of total products
@@ -68,7 +68,7 @@ Additional React libraries used in this project:
 -   Date FNS - date formatting
 -   Notistack - app notifications
 
-Howw React app is rendered in Laravel project:
+How React app is rendered in Laravel project:
 
 1. Generic route for all React pages matching everything coming after slash ('/') is defined in web.php
 

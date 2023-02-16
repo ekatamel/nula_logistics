@@ -9,7 +9,7 @@ class Authenticate extends Middleware
 {
     /**
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param  \Illuminate\Http\Request  
      * @return string|null
      */
     protected function redirectTo($request)
@@ -19,15 +19,4 @@ class Authenticate extends Middleware
             return route('login');
         }
     }
-
-    // public function handle($request, Closure $next, ...$guards)
-    // {
-    //     if ($jwt = $request->cookie('jwt')) {
-    //         $request->headers->set('Authorization', 'Bearer' . $jwt);
-    //     }
-
-    //     $this->authenticate($request, $guards);
-
-    //     return $next($request);
-    // }
 }
